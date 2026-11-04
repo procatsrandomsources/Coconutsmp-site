@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Firebase - CoconutSMP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #07080a;
+            color: #fff;
+        }
+        .button {
+            background: #fe8001;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background: #e67300;
+        }
+        .log {
+            background: #1f242d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🥥 Firebase Seeding Tool - CoconutSMP</h1>
+    <p>This tool will seed your Firebase database with sample player data.</p>
+    
+    <button class="button" onclick="seedPlayers()">📊 Seed Sample Players</button>
+    <button class="button" onclick="seedServerStats()">📈 Seed Server Stats (7 days)</button>
+    <button class="button" onclick="addCustomPlayer()">➕ Add Custom Player</button>
+    <button class="button" onclick="clearPlayers()">🗑️ Clear All Players</button>
+    <button class="button" onclick="listPlayers()">📋 List All Players</button>
+    
+    <div id="log" class="log">
+        <div class="info">Ready to seed Firebase...</div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3kXUbpPL7IEB41pYssJx-6vP4-VGr2sU",
+            authDomain: "cocodash-6bf2d.firebaseapp.com",
+            projectId: "cocodash-6bf2d",
+            storageBucket: "cocodash-6bf2d.firebasestorage.app",
+            messagingSenderId: "599890056838",
+            appId: "1:599890056838:web:ee6c4c6c7aa6ebf30c6307",
+            measurementId: "G-DXVHTKNJWX"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Sample player data
+        const samplePlayers = [
+            {
+                name: 'Steve',
+                uuid: '8667ba71b85a4004af54457a9714e7e6',
+                joined: '2024-01-01',
+                lastSeen: new Date().toISOString(),
+                playtime: 1250,
+                money: 50000,
+                rank: 'Member'
+            },
+            {
+                name: 'Alex',
+                uuid: '144485f2b9014b60970cb3f9e8b8ef04',
+                joined: '2024-02-15',
+                lastSeen: new Date(Date.now() - 86400000).toISOString(),
+                playtime: 890,
+                money: 125000,
+                rank: 'VIP'
+            },
+            {
+                name: 'CoconutKing',
+                uuid: 'c12b5f3d6e8a4b2c9d1f8e7a6b5c4d3e',
+                joined: '2024-03-20',
+                lastSeen: new Date().toISOString(),
+                playtime: 2100,
+                money: 500000,
+                rank: 'Admin'
+            },
+            {
+                name: 'Procat999',
+                uuid: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+                joined: '2024-04-10',
+                lastSeen: new Date().toISOString(),
+                playtime: 1560,
+                money: 275000,
+                rank: 'Moderator'
+            },
+            {
+                name: 'Ray8921',
+                uuid: 'f1e2d3c4b5a697886950413276543210',
+                joined: '2024-05-05',
+                lastSeen: new Date(Date.now() - 172800000).toISOString(),
+                playtime: 750,
+                money: 85000,
+                rank: 'Member'
+            }
+        ];
+
+        async function seedPlayers() {
+            log('Starting to seed players...', 'info');
+            
+            for (const player of samplePlayers) {
+                try {
+                    await db.collection('players').doc(player.name).set(player);
+                    log(`✓ Added player: ${player.name}`, 'success');
+                } catch (error) {
+                    log(`✗ Error adding player ${player.name}: ${error.message}`, 'error');
+                }
+            }
+            
+            log('✓ Done seeding players!', 'success');
+            log('⚠ Remember to create Firestore indexes for better search performance', 'info');
+            log('  Go to: Firestore Database → Indexes → Create Index', 'info');
+            log('  Collection: players, Fields: name (ascending)', 'info');
+        }
+
+        async function seedServerStats() {
+            log('Starting to seed server stats (7 days)...', 'info');
+            
+            const now = Date.now();
+            const dayInMs = 24 * 60 * 60 * 1000;
+            
+            for (let day = 7; day >= 0; day--) {
+                const dayStart = now - (day * dayInMs);
+                
+                // Generate 6 data points per day (every 4 hours)
+                for (let hour = 0; hour < 24; hour += 4) {
+                    const timestamp = dayStart + (hour * 60 * 60 * 1000);
+                    const players = Math.floor(Math.random() * 40) + 10; // Random between 10-50
+                    
+                    try {
+                        await db.collection('server_stats').add({
+                            players: players,
+                            timestamp: timestamp,
+                            date: new Date(timestamp).toISOString()
+                        });
+                    } catch (error) {
+                        log(`✗ Error adding stat for day ${day} hour ${hour}: ${error.message}`, 'error');
+                    }
+                }
+            }
+            
+            log('✓ Done seeding server stats! (168 data points)', 'success');
+        }
+
+        async function addCustomPlayer() {
+            const name = prompt('Enter player name:');
+            if (!name) return;
+            
+            const uuid = prompt('Enter player UUID (or leave empty for auto):') || 
+                          generateUUID();
+            const rank = prompt('Enter rank (Member, VIP, Moderator, Admin):') || 'Member';
+            const money = parseInt(prompt('Enter starting money (default: 0):')) || 0;
+            
+            const player = {
+                name: name,
+                uuid: uuid,
+                joined: new Date().toISOString(),
+                lastSeen: new Date().toISOString(),
+                playtime: 0,
+                money: money,
+                rank: rank
+            };
+            
+            try {
+                await db.collection('players').doc(name).set(player);
+                log(`✓ Added custom player: ${name}`, 'success');
+            } catch (error) {
+                log(`✗ Error adding player: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearPlayers() {
+            if (!confirm('Are you sure you want to delete ALL players?')) return;
+            
+            try {
+                const snapshot = await db.collection('players').get();
+                const batch = db.batch();
+                
+                snapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                await batch.commit();
+                log(`✓ Cleared ${snapshot.size} players`, 'success');
+            } catch (error) {
+                log(`✗ Error clearing players: ${error.message}`, 'error');
+            }
+        }
+
+        async function listPlayers() {
+            log('Fetching players...', 'info');
+            
+            try {
+                const snapshot = await db.collection('players').get();
+                log(`Found ${snapshot.size} players:`, 'info');
+                
+                snapshot.forEach(doc => {
+                    const player = doc.data();
+                    log(`  - ${player.name} (${player.rank}) - Last seen: ${new Date(player.lastSeen).toLocaleDateString()}`, 'info');
+                });
+            } catch (error) {
+                log(`✗ Error listing players: ${error.message}`, 'error');
+            }
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        log('Firebase initialized. Ready to seed data.', 'success');
+    </script>
+</body>
+</html>

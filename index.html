@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="icoicon.png" type="image/png">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>CoconutSMP - Free Cross-Play Minecraft Server</title>
+    <meta name="title" content="CoconutSMP - Free Cross-Play Minecraft Server">
+    <meta name="description" content="Join CoconutSMP - Free cross-play Minecraft server supporting Java, Bedrock, and cracked clients. mc.coconutsmp.qzz.io">
+    <meta name="keywords" content="CoconutSMP, free Minecraft server, crossplay, Java, Bedrock, cracked, mc.coconutsmp.qzz.io">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coconutsmp.qzz.io/">
+    <meta name="theme-color" content="#fe8001">
+    <meta name="author" content="CoconutSMP">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coconutsmp.qzz.io/">
+    <meta property="og:title" content="CoconutSMP - Free Cross-Play Minecraft Server">
+    <meta property="og:description" content="Join CoconutSMP - Free cross-play Minecraft server supporting Java, Bedrock, and cracked clients.">
+    <meta property="og:image" content="https://coconutsmp.qzz.io/coconut.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        coco: {
+                            dark: '#0a0a0f',
+                            card: '#12121a',
+                            border: '#1e1e2e',
+                            accent: '#fe8001',
+                            green: '#10b981',
+                            discord: '#5865F2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+        }
+
+        .glass-card {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(254, 128, 1, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(254, 128, 1, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #fe8001;
+        }
+
+        .nav-link.active {
+            color: #fe8001;
+            background: rgba(254, 128, 1, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fe8001 0%, #ff9500 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(254, 128, 1, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(254, 128, 1, 0.1);
+            border: 1px solid rgba(254, 128, 1, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(254, 128, 1, 0.2);
+            border-color: rgba(254, 128, 1, 0.5);
+        }
+
+        .stat-card {
+            background: rgba(18, 18, 26, 0.6);
+            border: 1px solid rgba(254, 128, 1, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(254, 128, 1, 0.2);
+            background: rgba(18, 18, 26, 0.8);
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(254, 128, 1, 0.2) 0%, rgba(254, 128, 1, 0.05) 100%);
+            border: 1px solid rgba(254, 128, 1, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e1e2e;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fe8001;
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-coco-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-coco-accent flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-8 h-8 object-contain" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="text-xl font-bold text-white">CoconutSMP</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="index.html" class="nav-link active px-4 py-2 rounded-lg text-sm font-medium text-white">Home</a>
+                    <a href="dashboard.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Dashboard</a>
+                    <a href="vote.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Vote</a>
+                    <a href="forms.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Forms</a>
+                    <a href="https://download.coconutsmp.qzz.io" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Launcher</a>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Discord</a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden lg:flex items-center space-x-3">
+                    <button onclick="copyIP()" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center space-x-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="ip-text">mc.coconutsmp.qzz.io</span>
+                    </button>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium text-white">
+                        Join Discord
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 bg-coco-dark lg:hidden">
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold text-white">Menu</span>
+                <button id="mobile-menu-close" class="p-2 rounded-lg text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-lg bg-coco-accent/10 text-white font-medium">Home</a>
+                <a href="dashboard.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Dashboard</a>
+                <a href="vote.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Vote</a>
+                <a href="forms.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Forms</a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Launcher</a>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Discord</a>
+            </div>
+            <div class="mt-8 space-y-3">
+                <button onclick="copyIP()" class="w-full btn-secondary px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center space-x-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Copy Server IP</span>
+                </button>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="w-full btn-primary px-4 py-3 rounded-lg text-white font-medium text-center">
+                    Join Discord
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+                    Welcome to <span class="text-coco-accent">CoconutSMP</span>
+                </h1>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+                    Free cross-play Minecraft server. Join players from Java, Bedrock, and cracked clients on one unified server.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="copyIP()" class="btn-primary px-8 py-3 rounded-xl text-white font-semibold flex items-center space-x-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>mc.coconutsmp.qzz.io</span>
+                    </button>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="btn-secondary px-8 py-3 rounded-xl text-white font-semibold flex items-center space-x-2">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Join Discord</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Server Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Status</span>
+                        <i class="fa-solid fa-server text-coco-green"></i>
+                    </div>
+                    <div id="live-status" class="text-2xl font-bold text-white">Checking...</div>
+                    <div id="live-version" class="text-xs text-gray-500 mt-1">--</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Players Online</span>
+                        <i class="fa-solid fa-users text-coco-accent"></i>
+                    </div>
+                    <div id="live-players" class="text-2xl font-bold text-white">0 / 0</div>
+                    <div class="text-xs text-gray-500 mt-1">Current count</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Peak Players</span>
+                        <i class="fa-solid fa-chart-line text-purple-400"></i>
+                    </div>
+                    <div id="peak-players" class="text-2xl font-bold text-white">0</div>
+                    <div class="text-xs text-gray-500 mt-1">Recorded peak</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Last Updated</span>
+                        <i class="fa-solid fa-clock text-amber-400"></i>
+                    </div>
+                    <div id="last-update" class="text-2xl font-bold text-white">--</div>
+                    <div class="text-xs text-gray-500 mt-1">Auto-updates every 15s</div>
+                </div>
+            </div>
+
+            <!-- Live Player Graph -->
+            <div class="glass-card p-6 rounded-2xl mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Live Player Activity</h2>
+                        <p class="text-sm text-gray-400">Real-time player count history</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-coco-green/10 text-coco-green text-xs font-medium border border-coco-green/20">Live</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="playerChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Server Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-globe text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Cross-Platform</h3>
+                    <p class="text-gray-400 text-sm">Play on Java, Bedrock, Xbox, PlayStation, Nintendo Switch, Mobile, VR, and more.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-coins text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Free Economy</h3>
+                    <p class="text-gray-400 text-sm">Custom economy system with shops, auctions, and trading. 100% free to play.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-users text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Community</h3>
+                    <p class="text-gray-400 text-sm">Active Discord community with events, competitions, and friendly players.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-gift text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Free Ranks</h3>
+                    <p class="text-gray-400 text-sm">Earn free custom ranks, crate keys, and rewards through gameplay. No purchases needed.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-map text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Live Map</h3>
+                    <p class="text-gray-400 text-sm">Real-time world map viewer to explore the server and find your friends.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-shield-halved text-coco-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Secure</h3>
+                    <p class="text-gray-400 text-sm">Anti-cheat protection, land claiming, and player protection systems.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Join Section -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">How to Join</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
+                        <i class="fa-brands fa-java text-coco-accent"></i>
+                        <span>Java Edition</span>
+                    </h3>
+                    <ol class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">1.</span>
+                            <span>Open Minecraft Java Edition</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">2.</span>
+                            <span>Go to Multiplayer → Add Server</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">3.</span>
+                            <span>Enter server address: <span class="text-white font-mono">mc.coconutsmp.qzz.io</span></span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">4.</span>
+                            <span>Click Done and join the server</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
+                        <i class="fa-solid fa-mobile-screen text-coco-accent"></i>
+                        <span>Bedrock / Mobile</span>
+                    </h3>
+                    <ol class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">1.</span>
+                            <span>Open Minecraft Bedrock/PE</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">2.</span>
+                            <span>Go to Play → Servers → Add Server</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">3.</span>
+                            <span>Server Name: CoconutSMP</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">4.</span>
+                            <span>Server IP: <span class="text-white font-mono">mc.coconutsmp.qzz.io</span></span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-coco-accent font-bold">5.</span>
+                            <span>Port: <span class="text-white font-mono">19132</span></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-coco-border mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded-lg bg-coco-accent flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-6 h-6 object-contain" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="text-white font-semibold">CoconutSMP</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@OfficalCoconutSmp" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa-brands fa-youtube text-xl"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@officalcoconutsmp" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa-brands fa-tiktok text-xl"></i>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm mt-4 md:mt-0">© 2024 CoconutSMP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Copy IP function
+        function copyIP() {
+            const ip = 'mc.coconutsmp.qzz.io';
+            navigator.clipboard.writeText(ip).then(() => {
+                alert('Server IP copied: ' + ip);
+            });
+        }
+
+        // Server monitoring
+        const SERVER = 'mc.coconutsmp.qzz.io';
+        let savedHistory = JSON.parse(localStorage.getItem('mc_history_data') || '[]');
+        let maxPeak = parseInt(localStorage.getItem('mc_peak_count') || '0');
+
+        // Chart setup
+        const ctx = document.getElementById('playerChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+        gradient.addColorStop(0, 'rgba(254, 128, 1, 0.4)');
+        gradient.addColorStop(1, 'rgba(254, 128, 1, 0.0)');
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: savedHistory.map(item => item.time),
+                datasets: [{
+                    label: 'Players Online',
+                    data: savedHistory.map(item => item.count),
+                    borderColor: '#fe8001',
+                    borderWidth: 2.5,
+                    fill: true,
+                    backgroundColor: gradient,
+                    tension: 0.3,
+                    pointRadius: savedHistory.length > 30 ? 0 : 3,
+                    pointBackgroundColor: '#fe8001'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#12121a',
+                        borderColor: '#1e1e2e',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6b7280', font: { size: 10 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#1e1e2e' },
+                        ticks: { color: '#6b7280', font: { size: 10 }, precision: 0 }
+                    }
+                }
+            }
+        });
+
+        // Update server status
+        async function updateStatus() {
+            try {
+                const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER}`);
+                const data = await res.json();
+                const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                if (data.online) {
+                    const onlineCount = data.players.online;
+                    const maxCount = data.players.max;
+                    
+                    document.getElementById('live-status').innerText = 'Online';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-coco-green';
+                    document.getElementById('live-version').innerText = data.version?.name_clean || 'Java Edition';
+                    document.getElementById('live-players').innerText = `${onlineCount} / ${maxCount}`;
+                    
+                    if (onlineCount > maxPeak) {
+                        maxPeak = onlineCount;
+                        localStorage.setItem('mc_peak_count', maxPeak);
+                    }
+                    
+                    savedHistory.push({ time: nowStr, count: onlineCount });
+                    if (savedHistory.length > 50) savedHistory.shift();
+                    localStorage.setItem('mc_history_data', JSON.stringify(savedHistory));
+
+                    chart.data.labels = savedHistory.map(i => i.time);
+                    chart.data.datasets[0].data = savedHistory.map(i => i.count);
+                    chart.update();
+
+                } else {
+                    document.getElementById('live-status').innerText = 'Offline';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-red-500';
+                    document.getElementById('live-players').innerText = '0 / 0';
+                }
+
+                document.getElementById('peak-players').innerText = maxPeak;
+                document.getElementById('last-update').innerText = nowStr;
+
+            } catch (err) {
+                console.error('Failed to query MCStatus API:', err);
+                document.getElementById('live-status').innerText = 'Error';
+                document.getElementById('live-status').className = 'text-2xl font-bold text-amber-500';
+            }
+        }
+
+        // Initialize
+        document.getElementById('peak-players').innerText = maxPeak;
+        updateStatus();
+        setInterval(updateStatus, 15000);
+    </script>
+</body>
+</html>

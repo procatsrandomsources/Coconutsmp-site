@@ -1,0 +1,151 @@
+# Firebase Sync Skript - File-Based Approach
+# This Skript logs player data to a JSON file
+# A separate script (watch_and_sync.py) reads the file and syncs to Firebase
+# Requirements:
+# - Skript
+# - SkBee
+# - Vault (for economy)
+
+options:
+    sync::file: plugins/FirebaseSync/data.json
+    sync::on-join: true
+    sync::on-quit: true
+    sync::interval: 5
+    sync::enable: true
+
+# Initialize
+on load:
+    create file "%{sync::file}%" if it doesn't exist
+    set {_file} to file "%{sync::file}%"
+    write "[]" to {_file}
+    broadcast "&a[Firebase Sync] &7Sync system initialized"
+
+# On Player Join
+on join:
+    if {sync::enable} is false:
+        stop
+    
+    wait 2 seconds
+    log player join data
+    
+    if {sync::on-join} is true:
+        send "&a[Sync] &7Data logged for Firebase sync" to player
+
+# On Player Quit
+on quit:
+    if {sync::enable} is false:
+        stop
+    
+    if {sync::on-quit} is true:
+        log player quit data
+
+# Periodic Sync
+every {sync::interval} minutes:
+    if {sync::enable} is false:
+        stop
+    
+    loop all players:
+        log player data for sync
+    log server stats
+
+# Commands
+command /firebase-sync:
+    trigger:
+        log player data for sync
+        send "&a[Sync] &7Your data logged"
+
+command /firebase-sync-all:
+    permission: op
+    trigger:
+        set {_count} to 0
+        loop all players:
+            log player data for sync
+            add 1 to {_count}
+        log server stats
+        send "&a[Sync] &7Logged %{_count}% players"
+        send "&7File: %{sync::file}%"
+
+command /firebase-toggle:
+    permission: op
+    trigger:
+        if {sync::enable} is true:
+            set {sync::enable} to false
+            send "&c[Firebase Sync] &7Sync disabled"
+        else:
+            set {sync::enable} to true
+            send "&a[Firebase Sync] &7Sync enabled"
+
+command /firebase-status:
+    trigger:
+        send "&a[Firebase Sync Status]"
+        send "&7Enabled: %{sync::enable}%"
+        send "&7Sync on Join: %{sync::on-join}%"
+        send "&7Sync on Quit: %{sync::on-quit}%"
+        send "&7Sync Interval: %{sync::interval}% minutes"
+        send "&7File: %{sync::file}%"
+
+# Function: Log player join data
+function logPlayerJoinData():
+    set {_name} to player's name
+    set {_uuid} to player's uuid
+    set {_playtime} to %playtime% of player / 60
+    set {_balance} to player's balance
+    set {_rank} to player's rank
+    set {_joined} to "%player's first join date%" formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_lastseen} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_online} to true
+    
+    append player data to file
+
+# Function: Log player quit data
+function logPlayerQuitData():
+    set {_name} to player's name
+    set {_lastseen} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_online} to false
+    
+    append quit data to file
+
+# Function: Log player data for sync
+function logPlayerDataForSync():
+    set {_name} to player's name
+    set {_uuid} to player's uuid
+    set {_playtime} to %playtime% of player / 60
+    set {_balance} to player's balance
+    set {_rank} to player's rank
+    set {_joined} to "%player's first join date%" formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_lastseen} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_online} to true
+    
+    append player data to file
+
+# Function: Append player data to file
+function appendPlayerDataToFile():
+    set {_entry} to from "{""action"":""sync"", ""name"":""%{_name}%"", ""uuid"":""%{_uuid}%"", ""playtime"":%{_playtime}%, ""money"":%{_balance}%, ""rank"":""%{_rank}%"", ""joined"":""%{_joined}%"", ""lastSeen"":""%{_lastseen}%"", ""online"":%{_online}%}"
+    
+    set {_file} to file "%{sync::file}%"
+    set {_current} to read {_file}
+    set {_new} to "%{_current}%%{newline}%%{_entry}%"
+    write {_new} to {_file}
+
+# Function: Append quit data
+function appendQuitDataToFile():
+    set {_entry} to from "{""action"":""quit"", ""name"":""%{_name}%"", ""lastSeen"":""%{_lastseen}%""}"
+    
+    set {_file} to file "%{sync::file}%"
+    set {_current} to read {_file}
+    set {_new} to "%{_current}%%{newline}%%{_entry}%"
+    write {_new} to {_file}
+
+# Function: Log server stats
+function logServerStats():
+    set {_online} to number of all players
+    set {_max} to max players
+    set {_timestamp} to current time in milliseconds
+    set {_date} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    
+    set {_entry} to from "{""action"":""stats"", ""players"":%{_online}%, ""max"":%{_max}%, ""timestamp"":%{_timestamp}%, ""date"":""%{_date}%""}"
+    
+    set {_file} to file "%{sync::file}%"
+    set {_current} to read {_file}
+    set {_new} to "%{_current}%%{newline}%%{_entry}%"
+    write {_new} to {_file}

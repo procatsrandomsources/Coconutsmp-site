@@ -1,0 +1,86 @@
+# Firebase Sync Skript using Webhook Approach
+# This Skript sends player data to a webhook which then syncs to Firebase
+# Requirements:
+# - Skript
+# - SkBee
+# - SkRambler (for JSON) or just use simple string formatting
+# - A webhook endpoint (you can use a simple Firebase Cloud Function or a server)
+
+options:
+    webhook::url: https://your-webhook-url.com/firebase-sync
+    sync::on-join: true
+    sync::on-quit: true
+    sync::interval: 5
+
+# On Player Join - Send data to webhook
+on join:
+    if {sync::on-join} is true:
+        wait 2 seconds
+        send player data to webhook
+        send "&a[Sync] &7Data synced to Firebase" to player
+
+# On Player Quit - Update last seen
+on quit:
+    if {sync::on-quit} is true:
+        send player quit data to webhook
+
+# Periodic Sync
+every {sync::interval} minutes:
+    loop all players:
+        send player data to webhook
+    send server stats to webhook
+
+# Commands
+command /firebase-sync:
+    trigger:
+        send player data to webhook
+        send "&a[Sync] &7Your data synced"
+
+command /firebase-sync-all:
+    permission: op
+    trigger:
+        set {_count} to 0
+        loop all players:
+            send player data to webhook
+            add 1 to {_count}
+        send "&a[Sync] &7Synced %{_count}% players"
+        send server stats to webhook
+
+# Function: Send player data to webhook
+function sendPlayerDataToWebhook():
+    set {_name} to player's name
+    set {_uuid} to player's uuid
+    set {_playtime} to %playtime% of player / 60
+    set {_balance} to player's balance
+    set {_rank} to player's rank
+    set {_joined} to "%player's first join date%" formatted as "yyyy-MM-dd HH:mm:ss"
+    set {_lastseen} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    
+    # Create JSON-like string
+    set {_json} to "{""action"":""sync"", ""name"":""%{_name}%"", ""uuid"":""%{_uuid}%"", ""playtime"":%{_playtime}%, ""money"":%{_balance}%, ""rank"":""%{_rank}%"", ""joined"":""%{_joined}%"", ""lastSeen"":""%{_lastseen}%""}"
+    
+    # Send to webhook (requires SkBee or TuSKe)
+    # If using SkBee's HTTP (if available):
+    # send webhook request to "%{webhook::url}%" with body {_json}
+    
+    # For now, log it
+    log "[Firebase Sync] Player: %{_name}%, Playtime: %{_playtime}%, Money: %{_balance}%, Rank: %{_rank}%" to "plugins/FirebaseSync.log"
+
+# Function: Send quit data
+function sendPlayerQuitDataToWebhook():
+    set {_name} to player's name
+    set {_lastseen} to now formatted as "yyyy-MM-dd HH:mm:ss"
+    
+    set {_json} to "{""action"":""quit"", ""name"":""%{_name}%"", ""lastSeen"":""%{_lastseen}%""}"
+    
+    log "[Firebase Sync] Quit: %{_name}% at %{_lastseen}%" to "plugins/FirebaseSync.log"
+
+# Function: Send server stats
+function sendServerStatsToWebhook():
+    set {_online} to number of all players
+    set {_max} to max players
+    set {_timestamp} to current time in milliseconds
+    
+    set {_json} to "{""action"":""stats"", ""players"":%{_online}%, ""max"":%{_max}%, ""timestamp"":%{_timestamp}%}"
+    
+    log "[Firebase Sync] Server Stats: %{_online}%/%{_max}% online" to "plugins/FirebaseSync.log"

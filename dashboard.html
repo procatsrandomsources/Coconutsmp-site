@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="icoicon.png" type="image/png">
+
+    <title>CoconutSMP Dashboard - Live Server Stats</title>
+    <meta name="description" content="Live CoconutSMP server dashboard with player stats, uptime graphs, and real-time monitoring.">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        coco: {
+                            dark: '#0a0a0f',
+                            card: '#12121a',
+                            border: '#1e1e2e',
+                            accent: '#fe8001',
+                            green: '#10b981',
+                            discord: '#5865F2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+        }
+
+        .glass-card {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(254, 128, 1, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(254, 128, 1, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #fe8001;
+        }
+
+        .nav-link.active {
+            color: #fe8001;
+            background: rgba(254, 128, 1, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fe8001 0%, #ff9500 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(254, 128, 1, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(254, 128, 1, 0.1);
+            border: 1px solid rgba(254, 128, 1, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(254, 128, 1, 0.2);
+            border-color: rgba(254, 128, 1, 0.5);
+        }
+
+        .stat-card {
+            background: rgba(18, 18, 26, 0.6);
+            border: 1px solid rgba(254, 128, 1, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(254, 128, 1, 0.2);
+            background: rgba(18, 18, 26, 0.8);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e1e2e;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fe8001;
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-coco-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-coco-accent flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-8 h-8 object-contain" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="text-xl font-bold text-white">CoconutSMP</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="index.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Home</a>
+                    <a href="dashboard.html" class="nav-link active px-4 py-2 rounded-lg text-sm font-medium text-white">Dashboard</a>
+                    <a href="vote.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Vote</a>
+                    <a href="forms.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Forms</a>
+                    <a href="https://download.coconutsmp.qzz.io" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Launcher</a>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Discord</a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden lg:flex items-center space-x-3">
+                    <button onclick="copyIP()" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center space-x-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="ip-text">mc.coconutsmp.qzz.io</span>
+                    </button>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium text-white">
+                        Join Discord
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 bg-coco-dark lg:hidden">
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold text-white">Menu</span>
+                <button id="mobile-menu-close" class="p-2 rounded-lg text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Home</a>
+                <a href="dashboard.html" class="block px-4 py-3 rounded-lg bg-coco-accent/10 text-white font-medium">Dashboard</a>
+                <a href="vote.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Vote</a>
+                <a href="forms.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Forms</a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Launcher</a>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Discord</a>
+            </div>
+            <div class="mt-8 space-y-3">
+                <button onclick="copyIP()" class="w-full btn-secondary px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center space-x-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Copy Server IP</span>
+                </button>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="w-full btn-primary px-4 py-3 rounded-lg text-white font-medium text-center">
+                    Join Discord
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Header -->
+        <section class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">Server Dashboard</h1>
+                    <p class="text-gray-400">Real-time server monitoring and statistics</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="clearDataBtn" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-trash"></i>
+                        <span>Clear History</span>
+                    </button>
+                    <button id="syncBtn" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Sync Now</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Server Info -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-server text-coco-accent"></i>
+                        <span class="text-gray-400 text-sm">Target Server:</span>
+                        <span class="text-white font-mono text-sm">mc.coconutsmp.qzz.io</span>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-coco-green/10 text-coco-green text-xs font-medium border border-coco-green/20">Live Monitoring</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Cards -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Status</span>
+                        <i class="fa-solid fa-activity text-coco-green"></i>
+                    </div>
+                    <div id="live-status" class="text-2xl font-bold text-white">Checking...</div>
+                    <div id="live-version" class="text-xs text-gray-500 mt-1">--</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Online Players</span>
+                        <i class="fa-solid fa-users text-coco-accent"></i>
+                    </div>
+                    <div id="live-players" class="text-2xl font-bold text-white">0 / 0</div>
+                    <div class="text-xs text-gray-500 mt-1">Current count</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Recorded Peak</span>
+                        <i class="fa-solid fa-chart-line text-purple-400"></i>
+                    </div>
+                    <div id="peak-players" class="text-2xl font-bold text-white">0</div>
+                    <div class="text-xs text-gray-500 mt-1">Highest seen</div>
+                </div>
+
+                <div class="stat-card p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-400 text-sm">Last Checked</span>
+                        <i class="fa-solid fa-clock text-amber-400"></i>
+                    </div>
+                    <div id="last-check" class="text-2xl font-bold text-white">--</div>
+                    <div class="text-xs text-gray-500 mt-1">Auto-updates every 15s</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Player Graph -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Live Player History</h2>
+                        <p class="text-sm text-gray-400">Recorded live data points saved locally</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-coco-green/10 text-coco-green text-xs font-medium border border-coco-green/20">Live Logging</span>
+                </div>
+                <div class="h-80">
+                    <canvas id="playerChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Uptime Graph -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Server Uptime Tracking</h2>
+                        <p class="text-sm text-gray-400">Server availability over time</p>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="uptimeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Server Information -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
+            <div class="glass-card p-6 rounded-2xl">
+                <h2 class="text-xl font-bold text-white mb-4">Server Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Server Address</h3>
+                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
+                            <code class="text-coco-accent font-mono text-sm">mc.coconutsmp.qzz.io</code>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Bedrock Port</h3>
+                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
+                            <code class="text-coco-accent font-mono text-sm">19132</code>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Supported Versions</h3>
+                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
+                            <code class="text-coco-accent font-mono text-sm">1.7 - 1.20+</code>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">API Status</h3>
+                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
+                            <span id="api-status" class="text-coco-green font-mono text-sm">Connected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Embed Badge -->
+        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-12">
+            <div class="glass-card p-6 rounded-2xl">
+                <h2 class="text-xl font-bold text-white mb-2">Status Badge</h2>
+                <p class="text-sm text-gray-400 mb-4">Use this badge on your website or GitHub profile:</p>
+                <div class="bg-coco-dark p-4 rounded-lg border border-coco-border">
+                    <code class="text-gray-300 font-mono text-xs break-all">
+                        &lt;a href="https://mcstatus.io/status/java/mc.coconutsmp.qzz.io"&gt;&lt;img src="https://img.shields.io/badge/Minecraft-Online-emerald?style=for-the-badge&logo=minecraft" alt="Server Status"&gt;&lt;/a&gt;
+                    </code>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-coco-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded-lg bg-coco-accent flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-6 h-6 object-contain" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="text-white font-semibold">CoconutSMP</span>
+                </div>
+                <p class="text-gray-500 text-sm">© 2024 CoconutSMP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Copy IP function
+        function copyIP() {
+            const ip = 'mc.coconutsmp.qzz.io';
+            navigator.clipboard.writeText(ip).then(() => {
+                alert('Server IP copied: ' + ip);
+            });
+        }
+
+        // Server monitoring
+        const SERVER = 'mc.coconutsmp.qzz.io';
+        let savedHistory = JSON.parse(localStorage.getItem('mc_history_data') || '[]');
+        let maxPeak = parseInt(localStorage.getItem('mc_peak_count') || '0');
+        let uptimeHistory = JSON.parse(localStorage.getItem('uptime_history') || '[]');
+
+        // Player Chart setup
+        const playerCtx = document.getElementById('playerChart').getContext('2d');
+        const playerGradient = playerCtx.createLinearGradient(0, 0, 0, 300);
+        playerGradient.addColorStop(0, 'rgba(254, 128, 1, 0.4)');
+        playerGradient.addColorStop(1, 'rgba(254, 128, 1, 0.0)');
+
+        const playerChart = new Chart(playerCtx, {
+            type: 'line',
+            data: {
+                labels: savedHistory.map(item => item.time),
+                datasets: [{
+                    label: 'Players Online',
+                    data: savedHistory.map(item => item.count),
+                    borderColor: '#fe8001',
+                    borderWidth: 2.5,
+                    fill: true,
+                    backgroundColor: playerGradient,
+                    tension: 0.3,
+                    pointRadius: savedHistory.length > 30 ? 0 : 3,
+                    pointBackgroundColor: '#fe8001'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#12121a',
+                        borderColor: '#1e1e2e',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6b7280', font: { size: 10 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#1e1e2e' },
+                        ticks: { color: '#6b7280', font: { size: 10 }, precision: 0 }
+                    }
+                }
+            }
+        });
+
+        // Uptime Chart setup
+        const uptimeCtx = document.getElementById('uptimeChart').getContext('2d');
+        const uptimeGradient = uptimeCtx.createLinearGradient(0, 0, 0, 250);
+        uptimeGradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+        uptimeGradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+        const uptimeChart = new Chart(uptimeCtx, {
+            type: 'line',
+            data: {
+                labels: uptimeHistory.map(item => item.time),
+                datasets: [{
+                    label: 'Server Status',
+                    data: uptimeHistory.map(item => item.status),
+                    borderColor: '#10b981',
+                    borderWidth: 2.5,
+                    fill: true,
+                    backgroundColor: uptimeGradient,
+                    tension: 0.3,
+                    pointRadius: uptimeHistory.length > 30 ? 0 : 3,
+                    pointBackgroundColor: '#10b981',
+                    stepped: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#12121a',
+                        borderColor: '#1e1e2e',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw === 1 ? 'Online' : 'Offline';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6b7280', font: { size: 10 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 1.2,
+                        grid: { color: '#1e1e2e' },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { size: 10 },
+                            stepSize: 1,
+                            callback: function(value) {
+                                return value === 1 ? 'Online' : value === 0 ? 'Offline' : '';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update server status
+        async function updateStatus() {
+            try {
+                const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER}`);
+                const data = await res.json();
+                const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                if (data.online) {
+                    const onlineCount = data.players.online;
+                    const maxCount = data.players.max;
+                    
+                    document.getElementById('live-status').innerText = 'Online';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-coco-green';
+                    document.getElementById('live-version').innerText = data.version?.name_clean || 'Java Edition';
+                    document.getElementById('live-players').innerText = `${onlineCount} / ${maxCount}`;
+                    document.getElementById('api-status').innerText = 'Connected';
+                    document.getElementById('api-status').className = 'text-coco-green font-mono text-sm';
+                    
+                    if (onlineCount > maxPeak) {
+                        maxPeak = onlineCount;
+                        localStorage.setItem('mc_peak_count', maxPeak);
+                    }
+                    
+                    savedHistory.push({ time: nowStr, count: onlineCount });
+                    if (savedHistory.length > 50) savedHistory.shift();
+                    localStorage.setItem('mc_history_data', JSON.stringify(savedHistory));
+
+                    uptimeHistory.push({ time: nowStr, status: 1 });
+                    if (uptimeHistory.length > 50) uptimeHistory.shift();
+                    localStorage.setItem('uptime_history', JSON.stringify(uptimeHistory));
+
+                    playerChart.data.labels = savedHistory.map(i => i.time);
+                    playerChart.data.datasets[0].data = savedHistory.map(i => i.count);
+                    playerChart.update();
+
+                    uptimeChart.data.labels = uptimeHistory.map(i => i.time);
+                    uptimeChart.data.datasets[0].data = uptimeHistory.map(i => i.status);
+                    uptimeChart.update();
+
+                } else {
+                    document.getElementById('live-status').innerText = 'Offline';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-red-500';
+                    document.getElementById('live-players').innerText = '0 / 0';
+                    document.getElementById('api-status').innerText = 'Disconnected';
+                    document.getElementById('api-status').className = 'text-red-500 font-mono text-sm';
+
+                    uptimeHistory.push({ time: nowStr, status: 0 });
+                    if (uptimeHistory.length > 50) uptimeHistory.shift();
+                    localStorage.setItem('uptime_history', JSON.stringify(uptimeHistory));
+
+                    uptimeChart.data.labels = uptimeHistory.map(i => i.time);
+                    uptimeChart.data.datasets[0].data = uptimeHistory.map(i => i.status);
+                    uptimeChart.update();
+                }
+
+                document.getElementById('peak-players').innerText = maxPeak;
+                document.getElementById('last-check').innerText = nowStr;
+
+            } catch (err) {
+                console.error('Failed to query MCStatus API:', err);
+                document.getElementById('live-status').innerText = 'Error';
+                document.getElementById('live-status').className = 'text-2xl font-bold text-amber-500';
+                document.getElementById('api-status').innerText = 'Error';
+                document.getElementById('api-status').className = 'text-amber-500 font-mono text-sm';
+            }
+        }
+
+        // Button handlers
+        document.getElementById('syncBtn').addEventListener('click', updateStatus);
+        document.getElementById('clearDataBtn').addEventListener('click', () => {
+            localStorage.removeItem('mc_history_data');
+            localStorage.removeItem('mc_peak_count');
+            localStorage.removeItem('uptime_history');
+            savedHistory = [];
+            maxPeak = 0;
+            uptimeHistory = [];
+            playerChart.data.labels = [];
+            playerChart.data.datasets[0].data = [];
+            playerChart.update();
+            uptimeChart.data.labels = [];
+            uptimeChart.data.datasets[0].data = [];
+            uptimeChart.update();
+            document.getElementById('peak-players').innerText = '0';
+        });
+
+        // Initialize
+        document.getElementById('peak-players').innerText = maxPeak;
+        updateStatus();
+        setInterval(updateStatus, 15000);
+    </script>
+</body>
+</html>

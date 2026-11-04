@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="icoicon.png" type="image/png">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>CoconutSMP Forms | Staff Applications, Ban Appeals & More</title>
+    <meta name="title" content="CoconutSMP Forms | Staff Applications, Ban Appeals & More">
+    <meta name="description" content="Submit staff applications, ban appeals, bug reports, and more for CoconutSMP Minecraft Server.">
+    <meta name="keywords" content="CoconutSMP, forms, staff application, ban appeal, bug report, Minecraft server">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coconutsmp.qzz.io/forms">
+    <meta name="theme-color" content="#fe8001">
+    <meta name="author" content="CoconutSMP">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coconutsmp.qzz.io/forms">
+    <meta property="og:site_name" content="CoconutSMP">
+    <meta property="og:title" content="CoconutSMP Forms | Staff Applications, Ban Appeals & More">
+    <meta property="og:description" content="Submit staff applications, ban appeals, bug reports, and more for CoconutSMP Minecraft Server.">
+    <meta property="og:image" content="https://coconutsmp.qzz.io/coconut.png">
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://coconutsmp.qzz.io/forms">
+    <meta name="twitter:title" content="CoconutSMP Forms | Staff Applications, Ban Appeals & More">
+    <meta name="twitter:description" content="Submit staff applications, ban appeals, bug reports, and more for CoconutSMP Minecraft Server.">
+    <meta name="twitter:image" content="https://coconutsmp.qzz.io/coconut.png">
+
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        coco: {
+                            dark: '#07080a',
+                            card: '#0f1115',
+                            border: '#1f242d',
+                            accent: '#fe8001',
+                            gold: '#ffaa00',
+                            green: '#10b981',
+                            discord: '#5865F2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-display: swap;
+        }
+
+        .bg-checkered {
+            background-color: #07080a;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(254, 128, 1, 0.15) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(254, 128, 1, 0.12);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(254, 128, 1, 0.5);
+            box-shadow: 0 15px 35px -10px rgba(254, 128, 1, 0.25);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 25px rgba(254, 128, 1, 0.35); }
+            50% { box-shadow: 0 0 55px rgba(254, 128, 1, 0.65); }
+        }
+
+        .glow-accent {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        .pixelated {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .form-input {
+            background: rgba(7, 8, 10, 0.8);
+            border: 1px solid rgba(31, 36, 45, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #fe8001;
+            box-shadow: 0 0 0 3px rgba(254, 128, 1, 0.2);
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: rgba(156, 163, 175, 0.6);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #07080a; }
+        ::-webkit-scrollbar-thumb { background: #1f242d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fe8001; }
+    </style>
+</head>
+<body class="bg-coco-dark text-gray-100 font-sans selection:bg-coco-accent selection:text-white min-h-screen flex flex-col justify-between overflow-x-hidden relative bg-checkered">
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center space-x-3 glass-panel border-coco-accent text-white px-5 py-3.5 rounded-2xl shadow-2xl">
+        <i class="fa-solid fa-check text-coco-accent text-lg"></i>
+        <span id="toast-message" class="font-medium text-sm">Form submitted successfully!</span>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 bg-coco-dark/85 backdrop-blur-xl border-b border-coco-border transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index (12).html" class="flex items-center space-x-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-[#fe8001] p-2 shadow-xl group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                    <img src="coconut.png" alt="CoconutSMP Minecraft Server Icon" class="w-full h-full object-contain pixelated group-hover:rotate-12 transition-transform" onerror="this.onerror=null; this.src='icoicon.png';">
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-200 to-coco-accent bg-clip-text text-transparent">COCONUT<span class="text-coco-accent">SMP</span></span>
+                    <span class="block text-[10px] font-mono tracking-widest text-gray-400 font-semibold uppercase">Java • Bedrock • VR • Web • Cracked</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center space-x-1 bg-coco-card/80 p-1.5 rounded-2xl border border-coco-border">
+                <a href="index (12).html" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-house text-xs text-coco-accent"></i>
+                    <span>Home</span>
+                </a>
+                <a href="index (12).html#status-section" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-signal text-xs text-coco-green"></i>
+                    <span>Status</span>
+                </a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-rocket text-xs text-coco-accent"></i>
+                    <span>Launcher</span>
+                </a>
+                <a href="index (12).html#guides" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-book text-xs text-coco-accent"></i>
+                    <span>Guides</span>
+                </a>
+                <a href="vote.html" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-thumbs-up text-xs text-purple-500"></i>
+                    <span>Vote</span>
+                </a>
+                <a href="dashboard.html" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-chart-line text-xs text-coco-accent"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="seed_firebase.html" class="text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-database text-xs text-purple-400"></i>
+                    <span>Seed Data</span>
+                </a>
+                <a href="forms.html" class="text-xs font-semibold text-white bg-coco-accent/20 px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 border border-coco-accent/40">
+                    <i class="fa-solid fa-file-alt text-xs text-coco-accent"></i>
+                    <span>Forms</span>
+                </a>
+            </nav>
+
+            <div class="hidden xl:flex items-center space-x-2">
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="flex items-center space-x-2 bg-coco-discord/20 hover:bg-coco-discord text-white px-3 py-2.5 rounded-xl border border-coco-discord/40 transition-all font-mono text-xs font-bold shadow-lg">
+                    <i class="fa-brands fa-discord text-sm"></i>
+                    <span>Discord</span>
+                </a>
+            </div>
+
+            <button id="mobile-menu-btn" class="lg:hidden text-gray-300 hover:text-white p-2.5 rounded-xl glass-panel" aria-label="Open Mobile Menu">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-coco-dark/95 backdrop-blur-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col justify-between p-6">
+        <div>
+            <div class="flex items-center justify-between pb-6 border-b border-coco-border">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#fe8001] flex items-center justify-center text-white p-2">
+                        <img src="coconut.png" alt="CoconutSMP Logo" class="w-full h-full object-contain pixelated" onerror="this.onerror=null; this.src='icoicon.png';">
+                    </div>
+                    <span class="font-bold text-lg tracking-wide">CoconutSMP</span>
+                </div>
+                <button id="mobile-close-btn" class="p-2.5 text-gray-400 hover:text-white rounded-xl glass-panel" aria-label="Close Mobile Menu">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <nav class="mt-8 flex flex-col space-y-3">
+                <a href="index (12).html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-house text-coco-accent"></i><span>Home</span>
+                </a>
+                <a href="index (12).html#status-section" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-signal text-coco-green"></i><span>Live Server Status</span>
+                </a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-rocket text-coco-accent"></i><span>MC Launchers & iOS/iPA</span>
+                </a>
+                <a href="index (12).html#guides" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-book text-coco-accent"></i><span>How to Join Guides</span>
+                </a>
+                <a href="vote.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-thumbs-up text-purple-500"></i><span>Vote for Us</span>
+                </a>
+                <a href="dashboard.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-chart-line text-coco-accent"></i><span>Dashboard</span>
+                </a>
+                <a href="seed_firebase.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-database text-purple-400"></i><span>Seed Data</span>
+                </a>
+                <a href="forms.html" class="mobile-nav-link text-sm font-semibold text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3 border border-coco-accent/40">
+                    <i class="fa-solid fa-file-alt text-coco-accent"></i><span>Forms</span>
+                </a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-coco-border space-y-3">
+            <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="w-full bg-coco-discord text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 text-sm">
+                <i class="fa-brands fa-discord text-lg"></i>
+                <span>Join Official Discord</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="z-10 flex-grow py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <div class="mb-8 flex justify-center">
+                <div class="relative w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-[#fe8001] p-2 glow-accent animate-float flex items-center justify-center shadow-2xl">
+                    <img src="coconut.png" alt="CoconutSMP Logo" class="w-full h-full object-contain pixelated drop-shadow-[0_12px_20px_rgba(254,128,1,0.4)]" onerror="this.onerror=null; this.src='icoicon.png';">
+                </div>
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-4 leading-tight">
+                COCONUTSMP <br class="hidden sm:inline">
+                <span class="bg-gradient-to-r from-coco-accent via-coco-gold to-amber-400 bg-clip-text text-transparent">FORMS</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-base sm:text-lg text-gray-300 mb-8 leading-relaxed">
+                Submit applications, appeals, and reports. Join our team, appeal bans, report bugs, or suggest new features for the server!
+            </p>
+        </div>
+
+        <!-- Form Tabs -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="showForm('staff')" id="tab-staff" class="form-tab active bg-coco-accent text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Staff Application</span>
+            </button>
+            <button onclick="showForm('ban')" id="tab-ban" class="form-tab bg-coco-card text-gray-300 hover:text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 border border-coco-border">
+                <i class="fa-solid fa-gavel"></i>
+                <span>Ban Appeal</span>
+            </button>
+            <button onclick="showForm('bug')" id="tab-bug" class="form-tab bg-coco-card text-gray-300 hover:text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 border border-coco-border">
+                <i class="fa-solid fa-bug"></i>
+                <span>Bug Report</span>
+            </button>
+            <button onclick="showForm('suggestion')" id="tab-suggestion" class="form-tab bg-coco-card text-gray-300 hover:text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 border border-coco-border">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span>Suggestion</span>
+            </button>
+            <button onclick="showForm('report')" id="tab-report" class="form-tab bg-coco-card text-gray-300 hover:text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 border border-coco-border">
+                <i class="fa-solid fa-flag"></i>
+                <span>Player Report</span>
+            </button>
+        </div>
+
+        <!-- Staff Application Form -->
+        <div id="form-staff" class="form-content glass-panel p-8 rounded-3xl border border-coco-accent/40 shadow-2xl max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+                    <i class="fa-solid fa-user-shield text-coco-accent"></i>
+                    <span>Staff Application</span>
+                </h2>
+                <p class="text-gray-400 text-sm">Apply to become a staff member on CoconutSMP. Help us maintain a friendly and fun community!</p>
+            </div>
+            <form onsubmit="submitForm(event, 'Staff Application')">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Minecraft Username *</label>
+                        <input type="text" name="minecraftUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your in-game username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Discord Username *</label>
+                        <input type="text" name="discordUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="username#0000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Age *</label>
+                        <input type="number" name="age" required min="13" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your age">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Timezone *</label>
+                        <input type="text" name="timezone" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="e.g., EST, PST, UTC">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Position Applying For *</label>
+                        <select name="position" required class="form-input w-full px-4 py-3 rounded-xl text-white">
+                            <option value="">Select a position</option>
+                            <option value="moderator">Moderator</option>
+                            <option value="helper">Helper</option>
+                            <option value="builder">Builder</option>
+                            <option value="developer">Developer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">How long have you been playing on CoconutSMP? *</label>
+                        <textarea name="experience" required rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Tell us about your experience on the server"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Why do you want to become staff? *</label>
+                        <textarea name="motivation" required rows="4" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Explain your motivation for applying"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">What experience do you have with moderation? *</label>
+                        <textarea name="moderationExperience" required rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Previous moderation experience (if any)"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Additional Information</label>
+                        <textarea name="additionalInfo" rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Any other information you'd like to share"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-coco-accent to-coco-gold hover:from-orange-600 hover:to-amber-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:-translate-y-1">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Ban Appeal Form -->
+        <div id="form-ban" class="form-content glass-panel p-8 rounded-3xl border border-coco-accent/40 shadow-2xl max-w-3xl mx-auto hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+                    <i class="fa-solid fa-gavel text-coco-accent"></i>
+                    <span>Ban Appeal</span>
+                </h2>
+                <p class="text-gray-400 text-sm">Appeal a ban from CoconutSMP. Please provide accurate information for faster processing.</p>
+            </div>
+            <form onsubmit="submitForm(event, 'Ban Appeal')">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Minecraft Username *</label>
+                        <input type="text" name="minecraftUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your in-game username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Discord Username *</label>
+                        <input type="text" name="discordUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="username#0000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Ban Reason (if known)</label>
+                        <input type="text" name="banReason" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Reason shown when banned">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Date of Ban *</label>
+                        <input type="date" name="banDate" required class="form-input w-full px-4 py-3 rounded-xl text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Why should we unban you? *</label>
+                        <textarea name="unbanReason" required rows="4" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Explain why you deserve to be unbanned"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Additional Context</label>
+                        <textarea name="additionalContext" rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Any additional information about the situation"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-coco-accent to-coco-gold hover:from-orange-600 hover:to-amber-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:-translate-y-1">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit Appeal
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bug Report Form -->
+        <div id="form-bug" class="form-content glass-panel p-8 rounded-3xl border border-coco-accent/40 shadow-2xl max-w-3xl mx-auto hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+                    <i class="fa-solid fa-bug text-coco-accent"></i>
+                    <span>Bug Report</span>
+                </h2>
+                <p class="text-gray-400 text-sm">Report bugs or glitches you've encountered on the server. Help us improve CoconutSMP!</p>
+            </div>
+            <form onsubmit="submitForm(event, 'Bug Report')">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Minecraft Username *</label>
+                        <input type="text" name="minecraftUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your in-game username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Bug Category *</label>
+                        <select name="category" required class="form-input w-full px-4 py-3 rounded-xl text-white">
+                            <option value="">Select category</option>
+                            <option value="gameplay">Gameplay</option>
+                            <option value="economy">Economy</option>
+                            <option value="commands">Commands</option>
+                            <option value="ui">User Interface</option>
+                            <option value="performance">Performance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Bug Title *</label>
+                        <input type="text" name="bugTitle" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Brief description of the bug">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Detailed Description *</label>
+                        <textarea name="description" required rows="4" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Describe the bug in detail, including what happened and when"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Steps to Reproduce</label>
+                        <textarea name="stepsToReproduce" rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Step-by-step instructions to reproduce the bug"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Expected Behavior</label>
+                        <textarea name="expectedBehavior" rows="2" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="What should have happened instead"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-coco-accent to-coco-gold hover:from-orange-600 hover:to-amber-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:-translate-y-1">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit Bug Report
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Suggestion Form -->
+        <div id="form-suggestion" class="form-content glass-panel p-8 rounded-3xl border border-coco-accent/40 shadow-2xl max-w-3xl mx-auto hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+                    <i class="fa-solid fa-lightbulb text-coco-accent"></i>
+                    <span>Suggestion</span>
+                </h2>
+                <p class="text-gray-400 text-sm">Have an idea to improve CoconutSMP? Share your suggestions with us!</p>
+            </div>
+            <form onsubmit="submitForm(event, 'Suggestion')">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Minecraft Username *</label>
+                        <input type="text" name="minecraftUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your in-game username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Suggestion Category *</label>
+                        <select name="category" required class="form-input w-full px-4 py-3 rounded-xl text-white">
+                            <option value="">Select category</option>
+                            <option value="features">New Features</option>
+                            <option value="gameplay">Gameplay Changes</option>
+                            <option value="economy">Economy Adjustments</option>
+                            <option value="events">Events</option>
+                            <option value="quality">Quality of Life</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Suggestion Title *</label>
+                        <input type="text" name="suggestionTitle" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Brief title for your suggestion">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Detailed Description *</label>
+                        <textarea name="description" required rows="4" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Describe your suggestion in detail"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Why would this improve the server? *</label>
+                        <textarea name="benefits" required rows="3" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Explain the benefits of your suggestion"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-coco-accent to-coco-gold hover:from-orange-600 hover:to-amber-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:-translate-y-1">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit Suggestion
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Player Report Form -->
+        <div id="form-report" class="form-content glass-panel p-8 rounded-3xl border border-coco-accent/40 shadow-2xl max-w-3xl mx-auto hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+                    <i class="fa-solid fa-flag text-coco-accent"></i>
+                    <span>Player Report</span>
+                </h2>
+                <p class="text-gray-400 text-sm">Report a player for breaking rules. Please provide evidence when possible.</p>
+            </div>
+            <form onsubmit="submitForm(event, 'Player Report')">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Your Minecraft Username *</label>
+                        <input type="text" name="yourUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Your in-game username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Reported Player Username *</label>
+                        <input type="text" name="reportedUsername" required class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Username of the player being reported">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Report Category *</label>
+                        <select name="category" required class="form-input w-full px-4 py-3 rounded-xl text-white">
+                            <option value="">Select category</option>
+                            <option value="griefing">Griefing</option>
+                            <option value="harassment">Harassment</option>
+                            <option value="hacking">Hacking/Cheating</option>
+                            <option value="spam">Spam</option>
+                            <option value="scamming">Scamming</option>
+                            <option value="language">Inappropriate Language</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Incident Description *</label>
+                        <textarea name="incidentDescription" required rows="4" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Describe what happened in detail"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Evidence (Screenshots/Videos)</label>
+                        <input type="url" name="evidence" class="form-input w-full px-4 py-3 rounded-xl text-white mb-2" placeholder="Link to screenshots or video evidence">
+                        <div class="text-xs text-gray-400 mb-2">Or upload directly:</div>
+                        <input type="file" id="report-evidence-file" accept="image/*" class="chat-input w-full px-4 py-3 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-coco-accent file:text-white hover:file:bg-orange-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Additional Information</label>
+                        <textarea name="additionalInfo" rows="2" class="form-input w-full px-4 py-3 rounded-xl text-white" placeholder="Any other relevant information"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-coco-accent to-coco-gold hover:from-orange-600 hover:to-amber-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl transition-all transform hover:-translate-y-1">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit Report
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Info Section -->
+        <div class="mt-16 glass-panel p-8 rounded-3xl border border-coco-border max-w-3xl mx-auto">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center space-x-3">
+                <i class="fa-solid fa-info-circle text-coco-accent"></i>
+                <span>Important Information</span>
+            </h3>
+            <ul class="space-y-3 text-gray-300 text-sm">
+                <li class="flex items-start space-x-3">
+                    <i class="fa-solid fa-check text-coco-green mt-1"></i>
+                    <span>All forms are reviewed by our staff team. Please allow 24-48 hours for a response.</span>
+                </li>
+                <li class="flex items-start space-x-3">
+                    <i class="fa-solid fa-check text-coco-green mt-1"></i>
+                    <span>Provide accurate and detailed information to help us process your submission faster.</span>
+                </li>
+                <li class="flex items-start space-x-3">
+                    <i class="fa-solid fa-check text-coco-green mt-1"></i>
+                    <span>For urgent matters, please join our Discord server and contact staff directly.</span>
+                </li>
+                <li class="flex items-start space-x-3">
+                    <i class="fa-solid fa-check text-coco-green mt-1"></i>
+                    <span>False reports and spam submissions may result in penalties.</span>
+                </li>
+            </ul>
+            <div class="mt-6 pt-6 border-t border-coco-border">
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="inline-flex items-center space-x-2 bg-coco-discord hover:bg-opacity-90 text-white font-bold px-6 py-3 rounded-xl transition-all">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                    <span>Join Our Discord for Faster Support</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-coco-card border-t border-coco-border py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#fe8001] flex items-center justify-center p-2">
+                        <img src="coconut.png" alt="CoconutSMP Logo" class="w-full h-full object-contain pixelated" onerror="this.onerror=null; this.src='icoicon.png';">
+                    </div>
+                    <span class="font-bold text-lg">CoconutSMP</span>
+                </div>
+                <p class="text-gray-400 text-sm">© 2026 CoconutSMP. All rights reserved.</p>
+                <div class="flex items-center space-x-4">
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="text-gray-400 hover:text-coco-discord transition-colors">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                    </a>
+                    <a href="https://www.reddit.com/r/CommunityCoconutSMP/" target="_blank" class="text-gray-400 hover:text-orange-500 transition-colors">
+                        <i class="fa-brands fa-reddit text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3kXUbpPL7IEB41pYssJx-6vP4-VGr2sU",
+            authDomain: "cocodash-6bf2d.firebaseapp.com",
+            projectId: "cocodash-6bf2d",
+            storageBucket: "cocodash-6bf2d.firebasestorage.app",
+            messagingSenderId: "599890056838",
+            appId: "1:599890056838:web:ee6c4c6c7aa6ebf30c6307",
+            measurementId: "G-DXVHTKNJWX"
+        };
+
+        // Supabase Configuration
+        const supabaseUrl = "https://qnhxebwjzifnjlfgcuxu.supabase.co";
+        const supabaseKey = "sb_publishable_xgSNVLfCl1scznE2HIZwWg_va6P7KUe";
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log("Firebase initialized successfully");
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+        }
+
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+            console.log("Supabase initialized successfully");
+        } catch (error) {
+            console.error("Supabase initialization error:", error);
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileCloseBtn = document.getElementById('mobile-close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        mobileCloseBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // Form Tab Switching
+        function showForm(formId) {
+            // Hide all forms
+            document.querySelectorAll('.form-content').forEach(form => {
+                form.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.form-tab').forEach(tab => {
+                tab.classList.remove('bg-coco-accent', 'text-white');
+                tab.classList.add('bg-coco-card', 'text-gray-300', 'border', 'border-coco-border');
+            });
+            
+            // Show selected form
+            document.getElementById('form-' + formId).classList.remove('hidden');
+            
+            // Add active class to selected tab
+            const activeTab = document.getElementById('tab-' + formId);
+            activeTab.classList.remove('bg-coco-card', 'text-gray-300', 'border', 'border-coco-border');
+            activeTab.classList.add('bg-coco-accent', 'text-white');
+        }
+
+        // Form Submission
+        async function submitForm(event, formName) {
+            event.preventDefault();
+            
+            // Collect form data
+            const form = event.target;
+            const formData = {};
+            const inputs = form.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                if (input.name && input.type !== 'file') {
+                    formData[input.name] = input.value;
+                }
+            });
+            
+            // Handle image upload if present
+            const fileInput = document.getElementById('report-evidence-file');
+            if (fileInput && fileInput.files[0] && supabase) {
+                try {
+                    const file = fileInput.files[0];
+                    const fileName = `${Date.now()}_${file.name}`;
+                    const filePath = `evidence/${fileName}`;
+                    
+                    const { data, error } = await supabase.storage
+                        .from('images')
+                        .upload(filePath, file);
+                    
+                    if (error) throw error;
+                    
+                    // Get public URL
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('images')
+                        .getPublicUrl(filePath);
+                    
+                    formData.evidenceImage = publicUrl;
+                    console.log('Image uploaded:', publicUrl);
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    alert('Error uploading image: ' + error.message);
+                    return;
+                }
+            }
+            
+            // Add metadata
+            formData.type = formName;
+            formData.status = 'Pending';
+            formData.timestamp = Date.now();
+            formData.submittedAt = new Date().toISOString();
+            
+            // Submit to Firebase
+            if (db) {
+                db.collection('forms').add(formData)
+                    .then(() => {
+                        showSuccessToast(formName);
+                        form.reset();
+                        console.log('Form submitted successfully:', formData);
+                    })
+                    .catch(error => {
+                        console.error('Error submitting form:', error);
+                        alert('Error submitting form: ' + error.message + '\nPlease check your Firebase configuration.');
+                    });
+            } else {
+                // Demo mode
+                console.log('Form data (demo mode):', formData);
+                showSuccessToast(formName);
+                form.reset();
+            }
+        }
+
+        function showSuccessToast(formName) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = formName + ' submitted successfully!';
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>

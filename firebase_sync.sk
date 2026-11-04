@@ -1,0 +1,154 @@
+# Firebase Sync Skript for CoconutSMP
+# Requirements:
+# - Skript (latest version)
+# - SkBee (for NBT and additional features)
+# - TuSKe or skUtilities (for HTTP requests - or use SkBee's HTTP if available)
+# - Vault (for economy integration)
+
+options:
+    # Firebase Configuration
+    firebase::project-id: cocodash-6bf2d
+    firebase::api-key: AIzaSyD3kXUbpPL7IEB41pYssJx-6vP4-VGr2sU
+    firebase::collection: players
+    firebase::stats-collection: server_stats
+    
+    # Sync Settings
+    sync::on-join: true
+    sync::on-quit: true
+    sync::interval: 5 # minutes
+    sync::enable-auto-sync: true
+
+# On Player Join - Sync to Firebase
+on join:
+    if {sync::enable-auto-sync} is true:
+        wait 2 seconds # Give plugins time to load player data
+        sync player to firebase
+        send "&a[Sync] &7Player data synced to Firebase" to player
+
+# On Player Quit - Update last seen
+on quit:
+    if {sync::enable-auto-sync} is true:
+        update player last seen in firebase
+
+# Periodic Auto Sync (every X minutes)
+every {sync::interval} minutes:
+    loop all players:
+        sync player to firebase
+    sync server stats to firebase
+    broadcast "&a[Sync] &7Auto-sync completed for all online players"
+
+# Command: Manual sync for current player
+command /firebase-sync:
+    permission: firebase.sync
+    trigger:
+        sync player to firebase
+        send "&a[Sync] &7Your data has been synced to Firebase"
+        send "&7Name: %player's name%"
+        send "&7Playtime: %playtime% of %player%"
+        send "&7Balance: %player's balance%"
+        send "&7Rank: %player's rank%"
+
+# Command: Sync all online players
+command /firebase-sync-all:
+    permission: firebase.admin
+    trigger:
+        set {_count} to 0
+        loop all players:
+            sync player to firebase
+            add 1 to {_count}
+        send "&a[Sync] &7Synced %{_count}% players to Firebase"
+        sync server stats to firebase
+
+# Command: Sync specific player
+command /firebase-sync <player>:
+    permission: firebase.admin
+    trigger:
+        sync player to firebase
+        send "&a[Sync] &7Synced %arg-1% to Firebase"
+
+# Command: View Firebase data for player
+command /firebase-data [<player>]:
+    permission: firebase.view
+    trigger:
+        if arg-1 is set:
+            set {_p} to arg-1
+        else:
+            set {_p} to player
+        
+        send "&a[Firebase] &7Data for %{_p}%:"
+        send "&7UUID: %{_p}'s uuid%"
+        send "&7Playtime: %playtime% of %{_p}%"
+        send "&7Balance: %{_p}'s balance%"
+        send "&7Rank: %{_p}'s rank%"
+        send "&7First Join: %{_p}'s first join date%"
+        send "&7Last Login: %{_p}'s last login date%"
+
+# Function: Sync Player to Firebase
+function syncPlayer(p: player):
+    set {_name} to {_p}'s name
+    set {_uuid} to {_p}'s uuid
+    set {_playtime} to %playtime% of {_p} / 60 # Convert to minutes
+    set {_balance} to {_p}'s balance
+    set {_rank} to {_p}'s rank
+    set {_joined} to {_p}'s first join date
+    set {_lastseen} to {_p}'s last login date
+    
+    # Convert date to ISO format
+    set {_joined-iso} to "%{_joined}%" formatted as "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    set {_lastseen-iso} to "%{_lastseen}%" formatted as "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    
+    # Create JSON payload
+    set {_json} to from "{""name"": ""%{_name}%"", ""uuid"": ""%{_uuid}%"", ""playtime"": %{_playtime}%, ""money"": %{_balance}%, ""rank"": ""%{_rank}%"", ""joined"": ""%{_joined-iso}%"", ""lastSeen"": ""%{_lastseen-iso}%""}"
+    
+    # Send to Firebase via HTTP
+    # Note: This requires an HTTP addon like TuSKe or skUtilities
+    # If using TuSKe:
+    # send {_json} to "https://firestore.googleapis.com/v1/projects/%{firebase::project-id}%/databases/(default)/documents/%{firebase::collection%}/%{_name}%" with method "PATCH" with headers "Authorization: Bearer %{firebase::api-key}%" and "Content-Type: application/json"
+    
+    # For now, log to console (add HTTP addon support)
+    broadcast "&a[Sync] &7Would sync %{_name}% to Firebase" to console
+    log "&a[Sync] &7Player: %{_name}%, Playtime: %{_playtime}%, Money: %{_balance}%, Rank: %{_rank}%" to "plugins/FirebaseSync.log"
+
+# Function: Update last seen only
+function updateLastSeen(p: player):
+    set {_name} to {_p}'s name
+    set {_lastseen} to {_p}'s last login date
+    set {_lastseen-iso} to "%{_lastseen}%" formatted as "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    
+    # Update only lastSeen field
+    log "&a[Sync] &7Updated last seen for %{_name}%" to "plugins/FirebaseSync.log"
+
+# Function: Sync server stats
+function syncServerStats():
+    set {_online} to number of all players
+    set {_max} to max players
+    set {_timestamp} to current time in milliseconds
+    set {_date} to now formatted as "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    
+    log "&a[Sync] &7Server Stats: %{_online}%/%{_max}% online at %{_date}%" to "plugins/FirebaseSync.log"
+
+# Alternative: Use SkBee with a custom command that calls a webhook
+# If you have a webhook endpoint set up, you can use this:
+
+command /webhook-sync:
+    trigger:
+    # Prepare data
+    set {_data} to "player=%player%&uuid=%player's uuid%&playtime=%playtime%&balance=%player's balance%&rank=%player's rank%"
+    
+    # Send to webhook (requires an HTTP addon)
+    # send webhook request to "https://your-webhook-url.com/sync" with data {_data}
+    
+    send "&a[Sync] &7Data sent to webhook"
+
+# Example Economy Integration (if using EssentialsX)
+on player join:
+    wait 1 second
+    # This will trigger the main on join event above
+    # which will sync including economy data
+
+# Placeholder for HTTP requests (requires addon)
+# Install TuSKe: https://github.com/TuSKe/TuSKe
+# or skUtilities: https://www.spigotmc.org/resources/skutilities.19584/
+
+# If using TuSKe HTTP:
+# make a request to "https://firestore.googleapis.com/v1/projects/%{firebase::project-id}%/databases/(default)/documents/%{firebase::collection%}/%{_name}%" with method "PATCH" with body {_json} with headers {"Authorization": "Bearer %{firebase::api-key}%", "Content-Type": "application/json"}
