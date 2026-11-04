@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="icon" href="icoicon.png" type="image/png">
+
+    <title>CoconutSMP Tutorials - How to Join Guides</title>
+    <meta name="description" content="Step-by-step tutorials on how to join CoconutSMP on Java, Bedrock, Cracked, and custom skin setup.">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        coco: {
+                            dark: '#07080a',
+                            card: '#0f1115',
+                            border: '#1f242d',
+                            accent: '#fe8001',
+                            gold: '#ffaa00',
+                            green: '#10b981',
+                            discord: '#5865F2'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Title Font', 'sans-serif'],
+                        body: ['Normalfont', 'sans-serif'],
+                        bold: ['bold font', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Title Font';
+            src: url('TItle font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Normalfont';
+            src: url('Normalfont.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'bold font';
+            src: url('bold font.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
+
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #07080a;
+            color: #e5e5e5;
+            font-family: 'Normalfont', sans-serif;
+            line-height: 1.6;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #07080a 0%, #0f1115 50%, #07080a 100%);
+        }
+
+        .bg-checkered {
+            background-color: #07080a;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(254, 128, 1, 0.15) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(254, 128, 1, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(254, 128, 1, 0.5);
+            box-shadow: 0 15px 35px -10px rgba(254, 128, 1, 0.25);
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #fe8001;
+        }
+
+        .nav-link.active {
+            color: #fe8001;
+            background: rgba(254, 128, 1, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fe8001 0%, #ffaa00 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(254, 128, 1, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(254, 128, 1, 0.1);
+            border: 1px solid rgba(254, 128, 1, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(254, 128, 1, 0.2);
+            border-color: rgba(254, 128, 1, 0.5);
+        }
+
+        .tutorial-card {
+            background: rgba(15, 17, 21, 0.6);
+            border: 1px solid rgba(254, 128, 1, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-card:hover {
+            border-color: rgba(254, 128, 1, 0.2);
+            background: rgba(15, 17, 21, 0.8);
+        }
+
+        .tutorial-image {
+            border-radius: 12px;
+            border: 2px solid rgba(254, 128, 1, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-image:hover {
+            border-color: rgba(254, 128, 1, 0.3);
+        }
+
+        .pixelated {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #07080a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1f242d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fe8001;
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen bg-checkered">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-40 glass-panel border-b border-coco-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-[#fe8001] p-2 shadow-xl group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-full h-full object-contain pixelated group-hover:rotate-12 transition-transform" onerror="this.src='icoicon.png'">
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-200 to-coco-accent bg-clip-text text-transparent font-title">COCONUT<span class="text-coco-accent">SMP</span></span>
+                        <span class="block text-[10px] font-mono tracking-widest text-gray-400 font-semibold uppercase">Tutorials</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-1 bg-coco-card/80 p-1.5 rounded-2xl border border-coco-border">
+                    <a href="index.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-house text-xs text-coco-accent"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="dashboard.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-chart-line text-xs text-coco-accent"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="vote.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-thumbs-up text-xs text-purple-500"></i>
+                        <span>Vote</span>
+                    </a>
+                    <a href="forms.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-file-alt text-xs text-coco-accent"></i>
+                        <span>Forms</span>
+                    </a>
+                    <a href="tutorials.html" class="nav-link active px-3 py-2 rounded-xl text-xs font-semibold text-white flex items-center space-x-1.5">
+                        <i class="fa-solid fa-book text-xs text-coco-accent"></i>
+                        <span>Tutorials</span>
+                    </a>
+                    <a href="https://download.coconutsmp.qzz.io" target="_blank" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-rocket text-xs text-coco-accent"></i>
+                        <span>Launcher</span>
+                    </a>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-brands fa-discord text-xs text-coco-discord"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="flex items-center space-x-2 bg-coco-discord/20 hover:bg-coco-discord text-white px-3 py-2.5 rounded-xl border border-coco-discord/40 transition-all font-mono text-xs font-bold shadow-lg">
+                        <i class="fa-brands fa-discord text-sm"></i>
+                        <span>Discord</span>
+                    </a>
+                    <button onclick="copyIP('mc.coconutsmp.qzz.io')" class="flex items-center space-x-2 glass-panel px-3 py-2.5 rounded-xl transition-all group">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-coco-green opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-coco-green"></span>
+                        </span>
+                        <span class="text-gray-300 group-hover:text-white font-mono text-xs font-bold">mc.coconutsmp.qzz.io</span>
+                        <i class="fa-regular fa-copy text-coco-accent group-hover:scale-110 transition-transform text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2.5 rounded-xl glass-panel text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 bg-coco-dark/95 backdrop-blur-2xl lg:hidden flex flex-col justify-between p-6">
+        <div>
+            <div class="flex items-center justify-between pb-6 border-b border-coco-border">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#fe8001] flex items-center justify-center text-white p-2">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-full h-full object-contain pixelated" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="font-bold text-lg tracking-wide font-title">CoconutSMP</span>
+                </div>
+                <button id="mobile-close-btn" class="p-2.5 text-gray-400 hover:text-white rounded-xl glass-panel">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <nav class="mt-8 flex flex-col space-y-3">
+                <a href="index.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-house text-coco-accent"></i><span>Home</span>
+                </a>
+                <a href="dashboard.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-chart-line text-coco-accent"></i><span>Dashboard</span>
+                </a>
+                <a href="vote.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-thumbs-up text-purple-500"></i><span>Vote</span>
+                </a>
+                <a href="forms.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-file-alt text-coco-accent"></i><span>Forms</span>
+                </a>
+                <a href="tutorials.html" class="mobile-nav-link text-sm font-semibold text-white bg-coco-accent/20 p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-book text-coco-accent"></i><span>Tutorials</span>
+                </a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-rocket text-coco-accent"></i><span>Launcher</span>
+                </a>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-brands fa-discord text-coco-discord"></i><span>Discord</span>
+                </a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-coco-border">
+            <button onclick="copyIP('mc.coconutsmp.qzz.io')" class="w-full glass-panel text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 text-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Server IP</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-24">
+        <!-- Hero Section -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-4 leading-tight font-title">
+                    JOIN <span class="text-coco-accent">TUTORIALS</span>
+                </h1>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    Step-by-step guides on how to join CoconutSMP on different platforms and devices.
+                </p>
+            </div>
+
+            <!-- Tutorial Categories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <a href="#bedrock" class="tutorial-card p-6 rounded-2xl text-center cursor-pointer">
+                    <div class="w-16 h-16 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 mx-auto">
+                        <i class="fa-solid fa-mobile-screen text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 font-bold">Bedrock</h3>
+                    <p class="text-gray-400 text-sm">Mobile, Console, and Windows 10</p>
+                </a>
+
+                <a href="#java" class="tutorial-card p-6 rounded-2xl text-center cursor-pointer">
+                    <div class="w-16 h-16 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-4 mx-auto">
+                        <i class="fa-brands fa-java text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 font-bold">Java</h3>
+                    <p class="text-gray-400 text-sm">PC Java Edition</p>
+                </a>
+
+                <a href="#cracked" class="tutorial-card p-6 rounded-2xl text-center cursor-pointer">
+                    <div class="w-16 h-16 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-4 mx-auto">
+                        <i class="fa-solid fa-user-secret text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 font-bold">Cracked</h3>
+                    <p class="text-gray-400 text-sm">TLauncher and other clients</p>
+                </a>
+
+                <a href="#skins" class="tutorial-card p-6 rounded-2xl text-center cursor-pointer">
+                    <div class="w-16 h-16 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-4 mx-auto">
+                        <i class="fa-solid fa-user-astronaut text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 font-bold">Custom Skins</h3>
+                    <p class="text-gray-400 text-sm">Setup custom skins</p>
+                </a>
+            </div>
+
+            <!-- Bedrock Tutorial -->
+            <section id="bedrock" class="mb-16">
+                <div class="glass-panel p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold text-white mb-6 font-title flex items-center space-x-3">
+                        <i class="fa-solid fa-mobile-screen text-blue-400"></i>
+                        <span>Bedrock Edition Tutorial</span>
+                    </h2>
+                    <p class="text-gray-400 mb-8">Follow these steps to join CoconutSMP on Bedrock Edition (Mobile, Console, Windows 10):</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <img src="bedrocktut1.png" alt="Bedrock Tutorial Step 1" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 1: Open Minecraft Bedrock</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="bedrocktut2.png" alt="Bedrock Tutorial Step 2" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 2: Go to Play tab</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="bedrocktut3.png" alt="Bedrock Tutorial Step 3" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 3: Click on Servers</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="bedrocktut4.png" alt="Bedrock Tutorial Step 4" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 4: Add Server</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="bedrocktut5.png" alt="Bedrock Tutorial Step 5" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 5: Enter server details</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="bedrocktut6.png" alt="Bedrock Tutorial Step 6" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 6: Join the server</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-coco-dark rounded-xl border border-coco-border">
+                        <h3 class="text-lg font-bold text-white mb-4 font-bold">Server Details:</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-gray-400 text-sm">Server Name:</span>
+                                <p class="text-white font-mono">CoconutSMP</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Server IP:</span>
+                                <p class="text-coco-accent font-mono">mc.coconutsmp.qzz.io</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 text-sm">Port:</span>
+                                <p class="text-white font-mono">19132</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Java Tutorial -->
+            <section id="java" class="mb-16">
+                <div class="glass-panel p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold text-white mb-6 font-title flex items-center space-x-3">
+                        <i class="fa-brands fa-java text-orange-400"></i>
+                        <span>Java Edition Tutorial</span>
+                    </h2>
+                    <p class="text-gray-400 mb-8">Follow these steps to join CoconutSMP on Java Edition:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <img src="javatut1.png" alt="Java Tutorial Step 1" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 1: Open Minecraft Java</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="javatut2.png" alt="Java Tutorial Step 2" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 2: Go to Multiplayer</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="javatut3.png" alt="Java Tutorial Step 3" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 3: Click Add Server</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="javatut4.png" alt="Java Tutorial Step 4" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 4: Enter server IP and join</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-coco-dark rounded-xl border border-coco-border">
+                        <h3 class="text-lg font-bold text-white mb-4 font-bold">Server Details:</h3>
+                        <div>
+                            <span class="text-gray-400 text-sm">Server IP:</span>
+                            <p class="text-coco-accent font-mono text-lg">mc.coconutsmp.qzz.io</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cracked Tutorial -->
+            <section id="cracked" class="mb-16">
+                <div class="glass-panel p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold text-white mb-6 font-title flex items-center space-x-3">
+                        <i class="fa-solid fa-user-secret text-red-400"></i>
+                        <span>Cracked Client Tutorial</span>
+                    </h2>
+                    <p class="text-gray-400 mb-8">Follow these steps to join CoconutSMP on a cracked client (TLauncher, etc.):</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <img src="crackedtut1.png" alt="Cracked Tutorial Step 1" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 1: Open your cracked launcher</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="crackedtut2.png" alt="Cracked Tutorial Step 2" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 2: Add server IP</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="crackedtut3.png" alt="Cracked Tutorial Step 3" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 3: Register in-game</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-coco-dark rounded-xl border border-coco-border">
+                        <h3 class="text-lg font-bold text-white mb-4 font-bold">Server Details:</h3>
+                        <div>
+                            <span class="text-gray-400 text-sm">Server IP:</span>
+                            <p class="text-coco-accent font-mono text-lg">mc.coconutsmp.qzz.io</p>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-gray-400 text-sm">Backup IP:</span>
+                            <p class="text-white font-mono">laurel-recite.tun.ply.gg</p>
+                        </div>
+                        <div class="mt-4 p-4 bg-red-500/10 rounded-lg border border-red-500/30">
+                            <p class="text-red-400 text-sm"><strong>Important:</strong> After joining, register your account using /register &lt;password&gt; &lt;password&gt;</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Custom Skins Tutorial -->
+            <section id="skins" class="mb-16">
+                <div class="glass-panel p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold text-white mb-6 font-title flex items-center space-x-3">
+                        <i class="fa-solid fa-user-astronaut text-purple-400"></i>
+                        <span>Custom Skins Tutorial</span>
+                    </h2>
+                    <p class="text-gray-400 mb-8">Follow these steps to set up custom skins on CoconutSMP:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <div class="text-center">
+                            <img src="skintut1.png" alt="Skin Tutorial Step 1" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 1: Visit skin website</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="skintut2.png" alt="Skin Tutorial Step 2" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 2: Upload your skin</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="skintut3.png" alt="Skin Tutorial Step 3" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 3: Get skin link</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="skintut4.png" alt="Skin Tutorial Step 4" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 4: Apply in-game</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="skintut5.png" alt="Skin Tutorial Step 5" class="tutorial-image w-full mb-4 pixelated">
+                            <p class="text-sm text-gray-400">Step 5: Done!</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-coco-dark rounded-xl border border-coco-border">
+                        <h3 class="text-lg font-bold text-white mb-4 font-bold">In-Game Commands:</h3>
+                        <div class="space-y-2 font-mono text-sm">
+                            <p class="text-gray-300"><span class="text-coco-accent">/skin</span> &lt;url&gt; - Set your skin from URL</p>
+                            <p class="text-gray-300"><span class="text-coco-accent">/skin clear</span> - Remove custom skin</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-coco-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded-lg bg-coco-accent flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-6 h-6 object-contain pixelated" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="text-white font-semibold font-title">CoconutSMP</span>
+                </div>
+                <p class="text-gray-500 text-sm">© 2024 CoconutSMP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileCloseBtn = document.getElementById('mobile-close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        mobileCloseBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Copy IP function
+        function copyIP(ip) {
+            navigator.clipboard.writeText(ip).then(() => {
+                alert('Server IP copied: ' + ip);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -24,16 +24,19 @@
                 extend: {
                     colors: {
                         coco: {
-                            dark: '#0a0a0f',
-                            card: '#12121a',
-                            border: '#1e1e2e',
+                            dark: '#07080a',
+                            card: '#0f1115',
+                            border: '#1f242d',
                             accent: '#fe8001',
+                            gold: '#ffaa00',
                             green: '#10b981',
                             discord: '#5865F2'
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        title: ['Title Font', 'sans-serif'],
+                        body: ['Normalfont', 'sans-serif'],
+                        bold: ['bold font', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace']
                     }
                 }
@@ -41,9 +44,34 @@
         }
     </script>
     
+    <!-- Custom Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Title Font';
+            src: url('TItle font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Normalfont';
+            src: url('Normalfont.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'bold font';
+            src: url('bold font.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
+
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -56,26 +84,35 @@
         }
 
         body {
-            background: #0a0a0f;
+            background: #07080a;
             color: #e5e5e5;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Normalfont', sans-serif;
             line-height: 1.6;
         }
 
         .gradient-bg {
-            background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+            background: linear-gradient(135deg, #07080a 0%, #0f1115 50%, #07080a 100%);
         }
 
-        .glass-card {
-            background: rgba(18, 18, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(254, 128, 1, 0.1);
+        .bg-checkered {
+            background-color: #07080a;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(254, 128, 1, 0.15) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(254, 128, 1, 0.12);
             transition: all 0.3s ease;
         }
 
-        .glass-card:hover {
-            border-color: rgba(254, 128, 1, 0.3);
-            transform: translateY(-2px);
+        .glass-panel:hover {
+            border-color: rgba(254, 128, 1, 0.5);
+            box-shadow: 0 15px 35px -10px rgba(254, 128, 1, 0.25);
         }
 
         .nav-link {
@@ -92,7 +129,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #fe8001 0%, #ff9500 100%);
+            background: linear-gradient(135deg, #fe8001 0%, #ffaa00 100%);
             transition: all 0.3s ease;
         }
 
@@ -113,14 +150,14 @@
         }
 
         .stat-card {
-            background: rgba(18, 18, 26, 0.6);
+            background: rgba(15, 17, 21, 0.6);
             border: 1px solid rgba(254, 128, 1, 0.08);
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             border-color: rgba(254, 128, 1, 0.2);
-            background: rgba(18, 18, 26, 0.8);
+            background: rgba(15, 17, 21, 0.8);
         }
 
         ::-webkit-scrollbar {
@@ -128,11 +165,11 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #0a0a0f;
+            background: #07080a;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #1e1e2e;
+            background: #1f242d;
             border-radius: 4px;
         }
 
@@ -150,85 +187,132 @@
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen">
+<body class="gradient-bg min-h-screen bg-checkered">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-coco-border">
+    <nav class="fixed top-0 left-0 right-0 z-40 glass-panel border-b border-coco-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex items-center justify-between h-20">
                 <!-- Logo -->
-                <a href="index.html" class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-coco-accent flex items-center justify-center">
-                        <img src="coconut.png" alt="CoconutSMP" class="w-8 h-8 object-contain" onerror="this.src='icoicon.png'">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-[#fe8001] p-2 shadow-xl group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-full h-full object-contain pixelated group-hover:rotate-12 transition-transform" onerror="this.src='icoicon.png'">
                     </div>
-                    <span class="text-xl font-bold text-white">CoconutSMP</span>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-200 to-coco-accent bg-clip-text text-transparent font-title">COCONUT<span class="text-coco-accent">SMP</span></span>
+                        <span class="block text-[10px] font-mono tracking-widest text-gray-400 font-semibold uppercase">Dashboard</span>
+                    </div>
                 </a>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden lg:flex items-center space-x-1">
-                    <a href="index.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Home</a>
-                    <a href="dashboard.html" class="nav-link active px-4 py-2 rounded-lg text-sm font-medium text-white">Dashboard</a>
-                    <a href="vote.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Vote</a>
-                    <a href="forms.html" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Forms</a>
-                    <a href="https://download.coconutsmp.qzz.io" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Launcher</a>
-                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300">Discord</a>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="hidden lg:flex items-center space-x-3">
-                    <button onclick="copyIP()" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center space-x-2">
-                        <i class="fa-regular fa-copy"></i>
-                        <span id="ip-text">mc.coconutsmp.qzz.io</span>
-                    </button>
-                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium text-white">
-                        Join Discord
+                <div class="hidden lg:flex items-center space-x-1 bg-coco-card/80 p-1.5 rounded-2xl border border-coco-border">
+                    <a href="index.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-house text-xs text-coco-accent"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="dashboard.html" class="nav-link active px-3 py-2 rounded-xl text-xs font-semibold text-white flex items-center space-x-1.5">
+                        <i class="fa-solid fa-chart-line text-xs text-coco-accent"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="vote.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-thumbs-up text-xs text-purple-500"></i>
+                        <span>Vote</span>
+                    </a>
+                    <a href="forms.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-file-alt text-xs text-coco-accent"></i>
+                        <span>Forms</span>
+                    </a>
+                    <a href="tutorials.html" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-book text-xs text-coco-accent"></i>
+                        <span>Tutorials</span>
+                    </a>
+                    <a href="https://download.coconutsmp.qzz.io" target="_blank" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-rocket text-xs text-coco-accent"></i>
+                        <span>Launcher</span>
+                    </a>
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="nav-link px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-coco-border/60 flex items-center space-x-1.5">
+                        <i class="fa-brands fa-discord text-xs text-coco-discord"></i>
+                        <span>Discord</span>
                     </a>
                 </div>
 
+                <!-- CTA Button -->
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="flex items-center space-x-2 bg-coco-discord/20 hover:bg-coco-discord text-white px-3 py-2.5 rounded-xl border border-coco-discord/40 transition-all font-mono text-xs font-bold shadow-lg">
+                        <i class="fa-brands fa-discord text-sm"></i>
+                        <span>Discord</span>
+                    </a>
+                    <button onclick="copyIP('mc.coconutsmp.qzz.io')" class="flex items-center space-x-2 glass-panel px-3 py-2.5 rounded-xl transition-all group">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span id="nav-status-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-coco-green opacity-75"></span>
+                          <span id="nav-status-dot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-coco-green"></span>
+                        </span>
+                        <span class="text-gray-300 group-hover:text-white font-mono text-xs font-bold">mc.coconutsmp.qzz.io</span>
+                        <i class="fa-regular fa-copy text-coco-accent group-hover:scale-110 transition-transform text-xs"></i>
+                    </button>
+                </div>
+
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                <button id="mobile-menu-btn" class="lg:hidden p-2.5 rounded-xl glass-panel text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 bg-coco-dark lg:hidden">
-        <div class="p-4">
-            <div class="flex items-center justify-between mb-8">
-                <span class="text-xl font-bold text-white">Menu</span>
-                <button id="mobile-menu-close" class="p-2 rounded-lg text-gray-300 hover:text-white">
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 bg-coco-dark/95 backdrop-blur-2xl lg:hidden flex flex-col justify-between p-6">
+        <div>
+            <div class="flex items-center justify-between pb-6 border-b border-coco-border">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#fe8001] flex items-center justify-center text-white p-2">
+                        <img src="coconut.png" alt="CoconutSMP" class="w-full h-full object-contain pixelated" onerror="this.src='icoicon.png'">
+                    </div>
+                    <span class="font-bold text-lg tracking-wide font-title">CoconutSMP</span>
+                </div>
+                <button id="mobile-close-btn" class="p-2.5 text-gray-400 hover:text-white rounded-xl glass-panel">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
-            <div class="space-y-2">
-                <a href="index.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Home</a>
-                <a href="dashboard.html" class="block px-4 py-3 rounded-lg bg-coco-accent/10 text-white font-medium">Dashboard</a>
-                <a href="vote.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Vote</a>
-                <a href="forms.html" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Forms</a>
-                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Launcher</a>
-                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-coco-card font-medium">Discord</a>
-            </div>
-            <div class="mt-8 space-y-3">
-                <button onclick="copyIP()" class="w-full btn-secondary px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center space-x-2">
-                    <i class="fa-regular fa-copy"></i>
-                    <span>Copy Server IP</span>
-                </button>
-                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="w-full btn-primary px-4 py-3 rounded-lg text-white font-medium text-center">
-                    Join Discord
+            <nav class="mt-8 flex flex-col space-y-3">
+                <a href="index.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-house text-coco-accent"></i><span>Home</span>
                 </a>
-            </div>
+                <a href="dashboard.html" class="mobile-nav-link text-sm font-semibold text-white bg-coco-accent/20 p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-chart-line text-coco-accent"></i><span>Dashboard</span>
+                </a>
+                <a href="vote.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-thumbs-up text-purple-500"></i><span>Vote</span>
+                </a>
+                <a href="forms.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-file-alt text-coco-accent"></i><span>Forms</span>
+                </a>
+                <a href="tutorials.html" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-book text-coco-accent"></i><span>Tutorials</span>
+                </a>
+                <a href="https://download.coconutsmp.qzz.io" target="_blank" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-solid fa-rocket text-coco-accent"></i><span>Launcher</span>
+                </a>
+                <a href="https://discord.gg/8azdbUDQ4N" target="_blank" class="mobile-nav-link text-sm font-semibold text-gray-200 hover:text-coco-accent p-3.5 rounded-xl glass-panel flex items-center space-x-3">
+                    <i class="fa-brands fa-discord text-coco-discord"></i><span>Discord</span>
+                </a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-coco-border">
+            <button onclick="copyIP('mc.coconutsmp.qzz.io')" class="w-full glass-panel text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 text-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Server IP</span>
+            </button>
         </div>
     </div>
 
     <!-- Main Content -->
-    <main class="pt-20">
+    <main class="pt-24">
         <!-- Header -->
         <section class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-white mb-2">Server Dashboard</h1>
+                    <h1 class="text-3xl font-bold text-white mb-2 font-title">Server Dashboard</h1>
                     <p class="text-gray-400">Real-time server monitoring and statistics</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -246,11 +330,16 @@
 
         <!-- Server Info -->
         <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
-            <div class="glass-card p-4 rounded-xl">
+            <div class="glass-panel p-4 rounded-xl">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <i class="fa-solid fa-server text-coco-accent"></i>
-                        <span class="text-gray-400 text-sm">Target Server:</span>
+                        <span class="text-gray-400 text-sm">API Server:</span>
+                        <span class="text-white font-mono text-sm">laurel-recite.tun.ply.gg</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-display text-coco-accent"></i>
+                        <span class="text-gray-400 text-sm">Display IP:</span>
                         <span class="text-white font-mono text-sm">mc.coconutsmp.qzz.io</span>
                     </div>
                     <span class="px-3 py-1 rounded-full bg-coco-green/10 text-coco-green text-xs font-medium border border-coco-green/20">Live Monitoring</span>
@@ -266,7 +355,7 @@
                         <span class="text-gray-400 text-sm">Status</span>
                         <i class="fa-solid fa-activity text-coco-green"></i>
                     </div>
-                    <div id="live-status" class="text-2xl font-bold text-white">Checking...</div>
+                    <div id="live-status" class="text-2xl font-bold text-white font-bold">Checking...</div>
                     <div id="live-version" class="text-xs text-gray-500 mt-1">--</div>
                 </div>
 
@@ -275,7 +364,7 @@
                         <span class="text-gray-400 text-sm">Online Players</span>
                         <i class="fa-solid fa-users text-coco-accent"></i>
                     </div>
-                    <div id="live-players" class="text-2xl font-bold text-white">0 / 0</div>
+                    <div id="live-players" class="text-2xl font-bold text-white font-bold">0 / 0</div>
                     <div class="text-xs text-gray-500 mt-1">Current count</div>
                 </div>
 
@@ -284,7 +373,7 @@
                         <span class="text-gray-400 text-sm">Recorded Peak</span>
                         <i class="fa-solid fa-chart-line text-purple-400"></i>
                     </div>
-                    <div id="peak-players" class="text-2xl font-bold text-white">0</div>
+                    <div id="peak-players" class="text-2xl font-bold text-white font-bold">0</div>
                     <div class="text-xs text-gray-500 mt-1">Highest seen</div>
                 </div>
 
@@ -293,7 +382,7 @@
                         <span class="text-gray-400 text-sm">Last Checked</span>
                         <i class="fa-solid fa-clock text-amber-400"></i>
                     </div>
-                    <div id="last-check" class="text-2xl font-bold text-white">--</div>
+                    <div id="last-check" class="text-2xl font-bold text-white font-bold">--</div>
                     <div class="text-xs text-gray-500 mt-1">Auto-updates every 15s</div>
                 </div>
             </div>
@@ -301,10 +390,10 @@
 
         <!-- Player Graph -->
         <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
-            <div class="glass-card p-6 rounded-2xl">
+            <div class="glass-panel p-6 rounded-2xl">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-xl font-bold text-white">Live Player History</h2>
+                        <h2 class="text-xl font-bold text-white font-bold">Live Player History</h2>
                         <p class="text-sm text-gray-400">Recorded live data points saved locally</p>
                     </div>
                     <span class="px-3 py-1 rounded-full bg-coco-green/10 text-coco-green text-xs font-medium border border-coco-green/20">Live Logging</span>
@@ -317,10 +406,10 @@
 
         <!-- Uptime Graph -->
         <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
-            <div class="glass-card p-6 rounded-2xl">
+            <div class="glass-panel p-6 rounded-2xl">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-xl font-bold text-white">Server Uptime Tracking</h2>
+                        <h2 class="text-xl font-bold text-white font-bold">Server Uptime Tracking</h2>
                         <p class="text-sm text-gray-400">Server availability over time</p>
                     </div>
                 </div>
@@ -332,13 +421,19 @@
 
         <!-- Server Information -->
         <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-8">
-            <div class="glass-card p-6 rounded-2xl">
-                <h2 class="text-xl font-bold text-white mb-4">Server Information</h2>
+            <div class="glass-panel p-6 rounded-2xl">
+                <h2 class="text-xl font-bold text-white mb-4 font-bold">Server Information</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Server Address</h3>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Display Address</h3>
                         <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
                             <code class="text-coco-accent font-mono text-sm">mc.coconutsmp.qzz.io</code>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">API Address</h3>
+                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
+                            <code class="text-coco-accent font-mono text-sm">laurel-recite.tun.ply.gg</code>
                         </div>
                     </div>
                     <div>
@@ -353,39 +448,21 @@
                             <code class="text-coco-accent font-mono text-sm">1.7 - 1.20+</code>
                         </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-400 mb-2">API Status</h3>
-                        <div class="bg-coco-dark p-3 rounded-lg border border-coco-border">
-                            <span id="api-status" class="text-coco-green font-mono text-sm">Connected</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Embed Badge -->
-        <section class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-12">
-            <div class="glass-card p-6 rounded-2xl">
-                <h2 class="text-xl font-bold text-white mb-2">Status Badge</h2>
-                <p class="text-sm text-gray-400 mb-4">Use this badge on your website or GitHub profile:</p>
-                <div class="bg-coco-dark p-4 rounded-lg border border-coco-border">
-                    <code class="text-gray-300 font-mono text-xs break-all">
-                        &lt;a href="https://mcstatus.io/status/java/mc.coconutsmp.qzz.io"&gt;&lt;img src="https://img.shields.io/badge/Minecraft-Online-emerald?style=for-the-badge&logo=minecraft" alt="Server Status"&gt;&lt;/a&gt;
-                    </code>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="glass-card border-t border-coco-border">
+    <footer class="glass-panel border-t border-coco-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="flex items-center space-x-3 mb-4 md:mb-0">
                     <div class="w-8 h-8 rounded-lg bg-coco-accent flex items-center justify-center">
                         <img src="coconut.png" alt="CoconutSMP" class="w-6 h-6 object-contain" onerror="this.src='icoicon.png'">
                     </div>
-                    <span class="text-white font-semibold">CoconutSMP</span>
+                    <span class="text-white font-semibold font-title">CoconutSMP</span>
                 </div>
                 <p class="text-gray-500 text-sm">© 2024 CoconutSMP. All rights reserved.</p>
             </div>
@@ -396,27 +473,26 @@
     <script>
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileCloseBtn = document.getElementById('mobile-close-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.add('open');
         });
 
-        mobileMenuClose.addEventListener('click', () => {
+        mobileCloseBtn.addEventListener('click', () => {
             mobileMenu.classList.remove('open');
         });
 
         // Copy IP function
-        function copyIP() {
-            const ip = 'mc.coconutsmp.qzz.io';
+        function copyIP(ip) {
             navigator.clipboard.writeText(ip).then(() => {
                 alert('Server IP copied: ' + ip);
             });
         }
 
-        // Server monitoring
-        const SERVER = 'mc.coconutsmp.qzz.io';
+        // Server monitoring - Use laurel-recite.tun.ply.gg for API
+        const API_SERVER = 'laurel-recite.tun.ply.gg';
         let savedHistory = JSON.parse(localStorage.getItem('mc_history_data') || '[]');
         let maxPeak = parseInt(localStorage.getItem('mc_peak_count') || '0');
         let uptimeHistory = JSON.parse(localStorage.getItem('uptime_history') || '[]');
@@ -439,19 +515,38 @@
                     fill: true,
                     backgroundColor: playerGradient,
                     tension: 0.3,
-                    pointRadius: savedHistory.length > 30 ? 0 : 3,
-                    pointBackgroundColor: '#fe8001'
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#fe8001',
+                    pointBorderColor: '#fe8001',
+                    pointBorderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#12121a',
-                        borderColor: '#1e1e2e',
-                        borderWidth: 1
+                        backgroundColor: '#0f1115',
+                        borderColor: '#fe8001',
+                        borderWidth: 2,
+                        padding: 12,
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 13 },
+                        displayColors: false,
+                        callbacks: {
+                            title: function(context) {
+                                return 'Time: ' + context[0].label;
+                            },
+                            label: function(context) {
+                                return 'Players: ' + context.parsed.y;
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -461,7 +556,7 @@
                     },
                     y: {
                         beginAtZero: true,
-                        grid: { color: '#1e1e2e' },
+                        grid: { color: '#1f242d' },
                         ticks: { color: '#6b7280', font: { size: 10 }, precision: 0 }
                     }
                 }
@@ -486,23 +581,37 @@
                     fill: true,
                     backgroundColor: uptimeGradient,
                     tension: 0.3,
-                    pointRadius: uptimeHistory.length > 30 ? 0 : 3,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
                     pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#10b981',
+                    pointBorderWidth: 2,
                     stepped: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#12121a',
-                        borderColor: '#1e1e2e',
-                        borderWidth: 1,
+                        backgroundColor: '#0f1115',
+                        borderColor: '#10b981',
+                        borderWidth: 2,
+                        padding: 12,
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 13 },
+                        displayColors: false,
                         callbacks: {
+                            title: function(context) {
+                                return 'Time: ' + context[0].label;
+                            },
                             label: function(context) {
-                                return context.raw === 1 ? 'Online' : 'Offline';
+                                return context.raw === 1 ? 'Status: Online' : 'Status: Offline';
                             }
                         }
                     }
@@ -515,7 +624,7 @@
                     y: {
                         beginAtZero: true,
                         max: 1.2,
-                        grid: { color: '#1e1e2e' },
+                        grid: { color: '#1f242d' },
                         ticks: {
                             color: '#6b7280',
                             font: { size: 10 },
@@ -532,7 +641,7 @@
         // Update server status
         async function updateStatus() {
             try {
-                const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER}`);
+                const res = await fetch(`https://api.mcstatus.io/v2/status/java/${API_SERVER}`);
                 const data = await res.json();
                 const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -541,11 +650,9 @@
                     const maxCount = data.players.max;
                     
                     document.getElementById('live-status').innerText = 'Online';
-                    document.getElementById('live-status').className = 'text-2xl font-bold text-coco-green';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-coco-green font-bold';
                     document.getElementById('live-version').innerText = data.version?.name_clean || 'Java Edition';
                     document.getElementById('live-players').innerText = `${onlineCount} / ${maxCount}`;
-                    document.getElementById('api-status').innerText = 'Connected';
-                    document.getElementById('api-status').className = 'text-coco-green font-mono text-sm';
                     
                     if (onlineCount > maxPeak) {
                         maxPeak = onlineCount;
@@ -570,10 +677,8 @@
 
                 } else {
                     document.getElementById('live-status').innerText = 'Offline';
-                    document.getElementById('live-status').className = 'text-2xl font-bold text-red-500';
+                    document.getElementById('live-status').className = 'text-2xl font-bold text-red-500 font-bold';
                     document.getElementById('live-players').innerText = '0 / 0';
-                    document.getElementById('api-status').innerText = 'Disconnected';
-                    document.getElementById('api-status').className = 'text-red-500 font-mono text-sm';
 
                     uptimeHistory.push({ time: nowStr, status: 0 });
                     if (uptimeHistory.length > 50) uptimeHistory.shift();
@@ -590,9 +695,7 @@
             } catch (err) {
                 console.error('Failed to query MCStatus API:', err);
                 document.getElementById('live-status').innerText = 'Error';
-                document.getElementById('live-status').className = 'text-2xl font-bold text-amber-500';
-                document.getElementById('api-status').innerText = 'Error';
-                document.getElementById('api-status').className = 'text-amber-500 font-mono text-sm';
+                document.getElementById('live-status').className = 'text-2xl font-bold text-amber-500 font-bold';
             }
         }
 
